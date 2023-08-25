@@ -1,0 +1,246 @@
+org: cfosterbz
+app: bugzero
+service: bugzero-rest-api
+package:
+  patterns:
+    - ../service-common/db/models/**
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  stage: ${opt:stage,'dev'}
+  httpApi:
+    cors: true
+    authorizers:
+      serviceAuthorizer:
+        identitySource: $request.header.Authorization
+        issuerUrl:
+          Fn::Join:
+            - ""
+            - - "https://cognito-idp."
+              - "${opt:region, self:provider.region}"
+              - ".amazonaws.com/"
+              - Ref: serviceUserPool
+        audience:
+          - Ref: serviceUserPoolClient
+  vpc:
+    securityGroupIds:
+      - !ImportValue VPCSecurityGroupId
+    subnetIds:
+      - !ImportValue PrivateSubnet1
+      - !ImportValue PrivateSubnet2
+      # - !ImportValue PublicSubnet1
+      # - !ImportValue PublicSubnet2
+  environment:
+    # db
+    DB_NAME: !ImportValue DbRdsName
+    DB_HOST: !ImportValue DbRdsEndpointAddress
+    DB_PORT: !ImportValue DbRdsEndpointPort
+    DB_USERNAME: !ImportValue DbRdsUser
+    DB_PASSWORD: !ImportValue DbRdsPass
+    STAGE: ${opt:stage,'dev'}
+    SNS_SERVICE_TRIGGER_TOPIC_ARN: !ImportValue SNSServiceTriggerTopic
+    SN_SUPPORT_USER_BASIC_AUTH_KEY: "${param:SN_SUPPORT_USER_BASIC_AUTH_KEY}"
+    # cognito
+    USER_POOL_ID: !Ref serviceUserPool
+    USER_POOL_CLIENT_ID: !Ref serviceUserPoolClient
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: sns:*
+          Resource:
+            - "*"
+        - Effect: Allow
+          Action: lambda:InvokeFunction
+          Resource:
+            - "*"
+        - Effect: Allow
+          Action: secretsmanager:CreateSecret
+          Resource:
+            - "*"
+        - Effect: Allow
+          Action: secretsmanager:PutSecretValue
+          Resource:
+            - "*"
+        - Effect: Allow
+          Action: secretsmanager:TagResource
+          Resource:
+            - "*"
+        - Effect: Allow
+          Action: secretsmanager:DescribeSecret
+          Resource:
+            - "*"
+functions:
+  # auth
+  # login:
+  #   handler: auth/handler.login
+  #   events:
+  #     - httpApi:
+  #         method: POST
+  #         path: /auth/login
+  # support
+  createSupportTicket:
+    handler: support/handler.createSupportTicket
+    events:
+      - httpApi:
+          method: POST
+          path: /support/ticket
+          authorizer: serviceAuthorizer
+
+  # settings
+  getSetting:
+    handler: setting/handler.getSetting
+    events:
+      - httpApi:
+          method: GET
+          path: /setting/{settingId}
+          authorizer: serviceAuthorizer
+  crtOrUpdClientSct:
+    handler: setting/handler.createOrUpdateClientSecret
+    timeout: 28
+    events:
+      - httpApi:
+          method: PUT
+          path: /setting/secret
+          authorizer: serviceAuthorizer
+  updateSetting:
+    handler: setting/handler.updateSetting
+    events:
+      - httpApi:
+          method: POST
+          path: /setting/{settingId}
+          authorizer: serviceAuthorizer
+  # managedProduct
+  crtOrUpdManagedPdct:
+    handler: managedProduct/handler.createOrUpdate
+    events:
+      - httpApi:
+          method: POST
+          path: /managedProducts
+          authorizer: serviceAuthorizer
+
+  getManagedProduct:
+    handler: managedProduct/handler.get
+    events:
+      - httpApi:
+          method: GET
+          path: /managedProducts/{id}
+          authorizer: serviceAuthorizer
+  deleteManagedProduct:
+    handler: managedProduct/handler.del
+    events:
+      - httpApi:
+          method: DELETE
+          path: /managedProducts/{id}
+          authorizer: serviceAuthorizer
+
+  listManagedProducts:
+    handler: managedProduct/handler.list
+    events:
+      - httpApi:
+          method: GET
+          path: /managedProducts
+          authorizer: serviceAuthorizer
+  # dashboard
+  getDashboard:
+    handler: dashboard/handler.get
+    events:
+      - httpApi:
+          method: GET
+          path: /dashboard
+          authorizer: serviceAuthorizer
+  # vendor
+  getVendorProducts:
+    handler: vendor/handler.listProducts
+    events:
+      - httpApi:
+          method: GET
+          path: /vendors/{vendorId}/products
+          authorizer: serviceAuthorizer
+  listVendors:
+    handler: vendor/handler.listVendors
+    events:
+      - httpApi:
+          method: GET
+          path: /vendors
+          authorizer: serviceAuthorizer
+  getVendor:
+    handler: vendor/handler.get
+    events:
+      - httpApi:
+          method: GET
+          path: /vendors/{vendorId}
+          authorizer: serviceAuthorizer
+  testCredsVendor:
+    handler: vendor/handler.testCreds
+    timeout: 28
+    events:
+      - httpApi:
+          method: POST
+          path: /vendors/testCredentials/{vendorId}
+          authorizer: serviceAuthorizer
+resources:
+  Resources:
+    serviceUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: service-user-pool-${opt:stage, self:provider.stage}
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+    serviceUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        PreventUserExistenceErrors: ENABLED
+        ClientName: service-user-pool-client-${opt:stage, self:provider.stage}
+        AllowedOAuthFlows:
+          - implicit
+        AllowedOAuthFlowsUserPoolClient: true
+        AllowedOAuthScopes:
+          - phone
+          - email
+          - openid
+          - profile
+          - aws.cognito.signin.user.admin
+        UserPoolId:
+          Ref: serviceUserPool
+        CallbackURLs:
+          - http://localhost:3000/authentication/login
+          - Fn::Join:
+              - ""
+              - - !ImportValue portalUrl
+                - "/authentication/login"
+        LogoutURLs:
+          - http://localhost:3000/authentication/logout
+          - Fn::Join:
+              - ""
+              - - !ImportValue portalUrl
+                - "/authentication/logout"
+
+        ExplicitAuthFlows:
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        GenerateSecret: false
+        SupportedIdentityProviders:
+          - COGNITO
+    serviceUserPoolDomain:
+      Type: AWS::Cognito::UserPoolDomain
+      Properties:
+        UserPoolId:
+          Ref: serviceUserPool
+        Domain: bugzero-${opt:stage, self:provider.stage}
+
+  Outputs:
+    ServiceUserPoolId:
+      Value:
+        Ref: serviceUserPool
+      Export:
+        Name: ${self:provider.stage}-serviceUserPoolId
+
+    ServiceUserPoolClientId:
+      Value:
+        Ref: serviceUserPoolClient
+      Export:
+        Name: ${self:provider.stage}-ServiceUserPoolClientId

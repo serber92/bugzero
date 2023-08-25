@@ -1,0 +1,70 @@
+Parameters:
+  BugZeroTenantAccountARNParameter:
+    Type: String
+    Default: ""
+    Description: Enter arn:aws:iam::xxxxx:root
+
+Resources:
+  AWSHealthRole:
+    Type: AWS::IAM::Role
+    DeletionPolicy: Delete
+    Properties:
+      RoleName: AWSHealthCrossAccountRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - { "Ref": "BugZeroTenantAccountARNParameter" }
+            Action:
+              - sts:AssumeRole
+          - Action: ["sts:AssumeRole"]
+            Effect: Allow
+            Principal:
+              Service: [lambda.amazonaws.com]
+      Path: /
+      Policies:
+        - PolicyName: CrossAccountPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - organizations:EnableAWSServiceAccess
+                  - organizations:DisableAWSServiceAccess
+                Resource: "*"
+                Condition:
+                  StringEquals:
+                    organizations:ServicePrincipal: health.amazonaws.com
+              - Effect: Allow
+                Action:
+                  - health:*
+                  - organizations:ListAccounts
+                  - organizations:ListParents
+                  - organizations:DescribeAccount
+                  - organizations:ListDelegatedAdministrators
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - iam:CreateServiceLinkedRole
+                  - organizations:ListAccounts
+                  - organizations:ListParents
+                  - organizations:DescribeAccount
+                  - organizations:ListDelegatedAdministrators
+                Resource: "*"
+                Condition:
+                  StringEquals:
+                    iam:AWSServiceName: health.amazonaws.com
+              - Effect: Allow
+                Action:
+                  - ce:GetCostAndUsage
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ce:GetDimensionValues
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - sts:AssumeRole
+                Resource: "*"

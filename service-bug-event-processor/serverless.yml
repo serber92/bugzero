@@ -1,0 +1,51 @@
+org: cfosterbz
+app: bugzero
+service: bug-event-processor
+package:
+  patterns:
+    - ../service-common/db/models/**
+provider:
+  name: aws
+  stage: ${opt:stage,'dev'}
+  # runtime: nodejs12.x
+  vpc:
+    securityGroupIds:
+      - !ImportValue VPCSecurityGroupId
+    subnetIds:
+      - !ImportValue PrivateSubnet1
+      - !ImportValue PrivateSubnet2
+      # - !ImportValue PublicSubnet1
+      # - !ImportValue PublicSubnet2
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: sns:*
+          Resource:
+            - "*"
+        - Effect: Allow
+          Action: secretsmanager:GetSecretValue
+          Resource:
+            - "*"
+  environment:
+    DB_NAME: !ImportValue DbRdsName
+    DB_HOST: !ImportValue DbRdsEndpointAddress
+    DB_PORT: !ImportValue DbRdsEndpointPort
+    DB_USERNAME: !ImportValue DbRdsUser
+    DB_PASSWORD: !ImportValue DbRdsPass
+    SN_AUTH_EVENT_MANAGEMENT_BASIC_TOKEN: "${param:SN_AUTH_EVENT_MANAGEMENT_BASIC_TOKEN}"
+    STAGE: ${opt:stage,'dev'}
+functions:
+  bugEventProcessor:
+    handler: handler.bugEventProcessor
+    timeout: 600
+    events:
+      - schedule:
+          rate: rate(10 minutes)
+          enabled: true
+      - sns:
+          arn: !ImportValue SNSServiceTriggerTopic
+          topicName: SNSServiceTriggerTopic
+          filterPolicy:
+            service:
+              - bugEventProcessor

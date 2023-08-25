@@ -1,0 +1,169 @@
+[
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2018-06-15T13:34:33Z",
+    "description": "Description of problem:\n\nManaging the flow of email coming from cron(8) can be a challenge, especially when you manage a lot of machines. A pattern I see in system administration is that either a ton of logic is put in wrappers/scripts to sensibly deal with any output - or even worse all output is zapped with this dreaded pattern:\n\n    * * * * * command_goes_here 2>&1 >/dev/null # piloting blind\n\nIn the above example when your cron job fails, you will never know about it. You were depending on cron to backup some files? Screwed! The job has been failing due to filesystem permission errors for weeks - all your files are gone.\n\nThere are workarounds for cron(8)'s shortcomings: you can either put logic in your scripts to only output when things went wrong, but then you'll not know about what didn't go wrong: \"do x || echo error x\".\n\nAnother approach is to use wrappers that buffer all output until it is clear what the exit code of the underlaying command was, and then print the output so cron will email. Shims such as cronic or chronic are popular, but not part of base.\n\nTo improve the situation I propose to add a simple crontab(5) convenience option called \"-n\" (mnemonic \"No mail if run successful\").\n\nWith this \"no mail if success\" option you can do things like:\n\n    * * * * * -n cp -rv src/ dest/\n\nWith the above example crontab(5) entry you'll only receive a mail from cron(8) if the cp(1) encountered some kind of error. You'll also have in that email up until what point cp(1) actually was able to copy files.\n\nThe \"-n\" option also encourages folks to be liberal with adding trace options to their shell scripts like \"set -o errexit -o nounset -o xtrace\", and just focus on making sure the script exits with a sensible exit code. This way when there is some kind of problem, you can read the full context from the cron mail and be more productive; and if there is no problem, you won't receive an email, reducing clutter in your inbox.\n\nAdditional info: OpenBSD & NetBSD implemented this in their forks of vixie cron\n\nOpenBSD: Cover letter https://marc.info/?l=openbsd-tech&m=152874866117948&w=2 / commit: https://github.com/openbsd/src/commit/14eea8168449751553ba549cb1e8725fe289aeaf\nNetBSD: commit: https://github.com/NetBSD/src/commit/666eac5018f695be8449458fffd3de77d9305eb1",
+    "id": 1591763,
+    "last_change_time": "2021-08-12T08:10:56Z",
+    "longdescs.count": 33,
+    "op_sys": "Unspecified",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "ASSIGNED",
+    "summary": "[RFE] add -n option to crontab(5) to suppress mail when the run was successful",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "perl-LDAP-0.66-7.el8",
+    "creation_time": "2019-01-03T00:50:55Z",
+    "description": "Description of problem:\n\nThe standard Perl method of accessing any LDAP server (Net::LDAP) was previously available from RedHat as the perl-LDAP package.  However starting with RHEL8, this package has been removed with no explanation.\n\nThis seems particularly odd given that it is *the* reference implementation for perl access to LDAP and there are hundreds if not thousands of utilities that have been developed over the years utilizing Net::LDAP and its related modules.\n\n\n\nHow reproducible:\n\n100%\n\nSteps to Reproduce:\n1. Install RHEL8 beta\n2. Search for the perl-LDAP package\n\n\nActual results:\nNot found\n\nExpected results:\nFound",
+    "last_change_time": "2021-08-27T22:33:16Z",
+    "longdescs.count": 60,
+    "op_sys": "Linux",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Add perl-LDAP package",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2019-01-15T16:36:08Z",
+    "description": "Description of problem:\n\nManagement decided to disable qla2xxx target support in RHEL8.\nI am going to disable the qla2xxx module in rtslib library.",
+    "id": 1666377,
+    "last_change_time": "2021-09-06T15:40:16Z",
+    "longdescs.count": 28,
+    "op_sys": "Unspecified",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Remove qla2xxx target support",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "1.0.5",
+    "creation_time": "2019-02-19T09:17:52Z",
+    "description": "Description of problem:\nWhen creating a snapshot on ppc64le, I receive $SUBJECT. Command with --propagate:\n# stratis --propagate fs snapshot test_pool test_fs test_snapshot\nTraceback (most recent call last):\n  File \"/usr/lib/python3.6/site-packages/dbus_python_client_gen/_invokers.py\", line 304, in dbus_func\n    return dbus_method(*xformed_args, timeout=timeout)\n  File \"/usr/lib64/python3.6/site-packages/dbus/proxies.py\", line 145, in __call__\n    **keywords)\n  File \"/usr/lib64/python3.6/site-packages/dbus/connection.py\", line 651, in call_blocking\n    message, timeout)\ndbus.exceptions.DBusException: org.freedesktop.DBus.Error.NoReply: Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/usr/lib/python3.6/site-packages/stratis_cli/_main.py\", line 48, in the_func\n    result.func(result)\n  File \"/usr/lib/python3.6/site-packages/stratis_cli/_actions/_logical.py\", line 138, in snapshot_filesystem\n    'snapshot_name': namespace.snapshot_name\n  File \"/usr/lib/python3.6/site-packages/dbus_python_client_gen/_invokers.py\", line 306, in dbus_func\n    raise DPClientInvocationError() from err\ndbus_python_client_gen._errors.DPClientInvocationError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/usr/bin/stratis\", line 33, in <module>\n    main()\n  File \"/usr/bin/stratis\", line 29, in main\n    return run()(sys.argv[1:])\n  File \"/usr/lib/python3.6/site-packages/stratis_cli/_main.py\", line 52, in the_func\n    raise StratisCliActionError(command_line_args, result) from err\nstratis_cli._errors.StratisCliActionError: Action selected by command-line arguments ['--propagate', 'fs', 'snapshot', 'test_pool', 'test_fs', 'test_snapshot'] which were parsed to Namespace(func=<function LogicalActions.snapshot_filesystem at 0x7fff8a2b7ae8>, origin_name='test_fs', pool_name='test_pool', propagate=True, snapshot_name='test_snapshot') failed\n\nVersion-Release number of selected component (if applicable):\nstratisd-1.0.3-1.el8.ppc64le\n\nHow reproducible:\n100% (2*)\n\nSteps to Reproduce:\n1. stratis pool create test_pool /dev/sda\n2. stratis fs create test_pool test_fs\n3. stratis fs snapshot test_pool test_fs test_snapshot\n\nActual results:\ndbus.exceptions.DBusException: org.freedesktop.DBus.Error.NoReply: Did not receive a reply\n\nExpected results:\nSnapshot created\n\nAdditional info:",
+    "id": "",
+    "last_change_time": "2021-09-06T15:22:57Z",
+    "longdescs.count": 19,
+    "op_sys": "Unspecified",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Establish environment variable to set D-Bus timeout parameter",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "6.2.2.23",
+    "creation_time": "2019-05-24T17:43:05Z",
+    "description": "As reported in https://github.com/dm-vdo/vdo/issues/15, users may want or need to change the UUID of a VDO volume.  We should provide that functionality.",
+    "id": 1713749,
+    "last_change_time": "2021-09-06T15:24:54Z",
+    "longdescs.count": 10,
+    "op_sys": "Unspecified",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "[RFE] Provide the user with a method to change the UUID of a VDO volume",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2019-05-27T16:02:06Z",
+    "description": "For a typical dynamic provisioning use case, multiple connected resources could be created in RHEL IdM, exist for some time and then removed 'at once'. An example could be a dynamic provisioning of a Hadoop job where actual job is executed on a number of newly allocated hosts enrolled into IdM. Each such host would have several Kerberos service principals created to represent separate Hadoop services on those hosts. After several hours of the job execution, all hosts and services will be decommissioned. Removal of the hosts creates replication activity that might be a source of performance degradation or replication conflicts.\n\nA key here is a rapid creation and removal of similar objects. They might fit into the same database backend pages for on-disk format of the backend storage and therefore potentially cause locking contention, reducing performance.\n\nThe purpose of this bug is to track the creation of repeatable tests that imitate these use cases.\n\nTypical objects and actions:\n  - hosts\n  - services on those hosts\n  - generation and retrieval of Kerberos principal keys for those services\n  - use of authentication using keytabs for Kerberos principals created (authentication against each other, often starting with inital TGT)\n\n  - users\n  - groups of those users\n  - resolving of the groups and users from multiple hosts\n\nAn order of magnitude of hosts -- several thousands of created/removed entries 'at once'\n\nAn order of magnitude of services -- few services per host\n\nAn order of magnitude of users -- several thousands of users, 10x less groups than users, with several hundred users per group.\n\nAcceptance criteria:\n - tests exist that imitate rapid creation and rapid removal of objects in RHEL IdM\n - performance of these operations is tracked against a baseline where baseline represents several generations:\n  - empty database (default installation)\n  - several runs of the 'rapid creation' tests\n  - several runs of the 'rapid removal' tests\n  - tests where 'rapid creation' and 'rapid removal' aren't balanced out, leading to growth of the RHEL IdM databases in terms of number of individual objects (\"a normal deployment\").",
+    "id": 1714307,
+    "last_change_time": "2021-08-18T10:34:04Z",
+    "longdescs.count": 6,
+    "op_sys": "Unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "NEW",
+    "summary": "Test rapid creation and removal of multiple connected resources",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "python-blivet-3.2.2-1.el8",
+    "creation_time": "2019-05-29T09:55:28Z",
+    "description": "This bug was initially created as a copy of Bug #1691319\n\nI am copying this bug because: The Anaconda rebase will require some fixes in blivet that can be backported from upstream.\n\nRebase anaconda in 8.2 to pull in numerous bug fixes and align rhel08 with feature work we've been doing upstream toward modularizing anaconda.",
+    "id": 1714970,
+    "last_change_time": "2021-09-06T15:32:44Z",
+    "longdescs.count": 9,
+    "op_sys": "Unspecified",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Rebase anaconda - fixes for blivet",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2019-06-05T14:23:30Z",
+    "description": "Description of problem:\n\nCurrently stratis-cli uses dbus-python-client-gen v0.6\n\nVersion-Release number of selected component (if applicable):\n\n\nHow reproducible:\n\nAlways\n\nSteps to Reproduce:\n\nVerify that dbus-python-client-gen 0.6 is the most recent (and only) release available in RHEL8.\n\nActual results:\n\nOn many dbus-python method errors, get empty error messages from the methods generated by the dbus-python-client-gen module. Note that the dbus-python-client-gen exceptions are chained w/ quite complete dbus-python exceptions, so it is not the case that the exception chain is w/out information, it's just that dbus-python-client-gen does not supply additional, generally useful, information.\n\nExpected results:\n\ndbus-python-client-gen error messages that contain more complete and useful information, like:\ndbus_python_client_gen._errors.DPClientInvocationError: Error while invoking method \"GetManagedObjects\" belonging to interface \"org.freedesktop.DBus.ObjectManager\" with arguments ()\ninstead of just the empty string\n\nAdditional info:\n\nNone",
+    "id": 1717460,
+    "last_change_time": "2021-09-06T15:20:42Z",
+    "longdescs.count": 8,
+    "op_sys": "Linux",
+    "priority": "",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Increase dbus-python-client-gen requirement from 0.6 to 0.7",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2019-06-05T15:06:45Z",
+    "description": "Currently the package dependencies for stratis-cli doesn't have specific versions.  We want to make sure that required packages for stratis-cli are enforced.\n\nCurrent list from specfile:\n\nRequires:       platform-python\nRequires:       python3-dateutil\nRequires:       python3-dbus-client-gen\nRequires:       python3-dbus-python-client-gen\nRequires:       python3-justbytes\n\n\nThese should have the same version requirements as the setup.py in the source.\n\nRequires:       platform-python \nRequires:       python3-dateutil \nRequires:       python3-dbus-client-gen >= 0.4\nRequires:       python3-dbus-python-client-gen  >= 0.7\nRequires:       python3-justbytes  = 0.11\n\nThe setup.py file in Stratis-cli has a version of 0.6, but \nBZ#1717460 would like to increment this version to 0.7, so this is \nreflected in the change above.",
+    "id": 1717489,
+    "last_change_time": "2021-09-06T15:19:42Z",
+    "longdescs.count": 9,
+    "op_sys": "Linux",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Specfile should have specific package requirements for package dependencies",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "1.0.6",
+    "creation_time": "2019-06-13T21:48:30Z",
+    "description": "Description of problem:\n\nstratisd does not properly restore last update time for variable length metadata on setup of a previously constructed pool.\n\n\nVersion-Release number of selected component (if applicable):\n\nany\n\nHow reproducible:\n\nAlways.\n\nSteps to Reproduce:\n\nSee upstream bug: https://github.com/stratis-storage/stratisd/issues/1509. \n\nActual results:\n\nstratisd fails to complete setup of pool when all devices belonging to a pool are attached to a machine which has a time which is less than that when the variable length metadata was last written to the pool. The pool remains as an incomplete pool because metadata could not be written.\n\nExpected results:\n\nA well-formed pool is completely set up.\n\nAdditional info:",
+    "id": 1720399,
+    "last_change_time": "2021-09-06T15:35:33Z",
+    "longdescs.count": 11,
+    "op_sys": "Unspecified",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Last update time for variable length metadata not properly set on pool setup",
+    "version": [
+    ],
+    "votes": 0
+  }
+]

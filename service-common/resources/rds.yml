@@ -1,0 +1,101 @@
+Resources:
+  DBSubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupDescription: DB subnet group
+      SubnetIds:
+        - Ref: PrivateSubnet1
+        - Ref: PrivateSubnet2
+  Database:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      MasterUsername: ${param:DB_USER}
+      BackupRetentionPeriod: 30
+      EnableHttpEndpoint: true
+      MasterUserPassword: ${param:DB_PASS}
+      DatabaseName: ${self:custom.dbName}
+      Engine: aurora-mysql
+      EngineMode: serverless
+      Tags:
+        - Key: RDS
+          Value: "aurora"
+      ScalingConfiguration:
+        AutoPause: false
+        MaxCapacity: 2
+        MinCapacity: 1
+        SecondsUntilAutoPause: 300
+      DBSubnetGroupName:
+        Ref: DBSubnetGroup
+      VpcSecurityGroupIds:
+        - Ref: VPCSecurityGroup
+Outputs:
+  # Export ARN's for other services
+  DbRdsUser:
+    Value: ${param:DB_USER}
+    Export:
+      Name: DbRdsUser
+  DbRdsPass:
+    Value: ${param:DB_PASS}
+    Export:
+      Name: DbRdsPass
+  DbRdsName:
+    Value: ${self:custom.dbName}
+    Export:
+      Name: DbRdsName
+  DbRdsEndpointAddress:
+    Value:
+      Fn::GetAtt:
+        - Database
+        - Endpoint.Address
+    Export:
+      Name: ${self:provider.stage}-DbRdsEndpointAddress
+  DbRdsEndpointAddress2:
+    Value:
+      Fn::GetAtt:
+        - Database
+        - Endpoint.Address
+    Export:
+      Name: DbRdsEndpointAddress
+  DbRdsEndpointPort:
+    Value:
+      Fn::GetAtt:
+        - Database
+        - Endpoint.Port
+    Export:
+      Name: DbRdsEndpointPort
+  DbRdsTableBugs:
+    Value: "bugs"
+    Export:
+      Name: DbRdsTableBugs
+  DbRdsTableManagedProducts:
+    Value: "managedProducts"
+    Export:
+      Name: DbRdsTableManagedProducts
+  DbRdsTableManagedProductVersions:
+    Value: "managedProductVersions"
+    Export:
+      Name: DbRdsTableManagedProductVersions
+  DbRdsTableMsftBugs:
+    Value: "msftBugs"
+    Export:
+      Name: DbRdsTableMsftBugs
+  DbRdsTableVendorProducts:
+    Value: "vendorProducts"
+    Export:
+      Name: DbRdsTableVendorProducts
+  DbRdsTableVendorProductFamilies:
+    Value: "vendorProductFamilies"
+    Export:
+      Name: DbRdsTableVendorProductFamilies
+  DbRdsTableVendorProductVersions:
+    Value: "vendorProductVersions"
+    Export:
+      Name: DbRdsTableVendorProductVersions
+  DbRdsTableSettings:
+    Value: "settings"
+    Export:
+      Name: DbRdsTableSettings
+  DbRdsTableVendors:
+    Value: "vendors"
+    Export:
+      Name: DbRdsTableVendors

@@ -1,0 +1,83 @@
+org: cfosterbz
+app: bugzero
+service: vendor-fortinet-api
+package:
+  patterns:
+    - ../service-common/python/lib/**
+provider:
+  name: aws
+  stage: ${opt:stage,'dev'}
+  runtime: python3.7
+  vpc:
+    securityGroupIds:
+      - !ImportValue VPCSecurityGroupId
+    subnetIds:
+      - !ImportValue PrivateSubnet1
+      - !ImportValue PrivateSubnet2
+  environment:
+    STAGE: ${opt:stage,'dev'}
+    # tables
+    BUGS_TABLE: "bugs"
+    MANAGED_PRODUCTS_TABLE: "managedProducts"
+    SETTINGS_TABLE: "settings"
+    SERVICES_TABLE: "services"
+    SERVICE_EXECUTION_TABLE: "serviceExecutions"
+    VENDORS_TABLE: "vendors"
+    VENDOR_PRODUCT_FAMILIES_TABLE: "vendorProductFamilies"
+    # DB Connectivity
+    DB_PORT: !ImportValue DbRdsEndpointPort
+    DB_HOST: !ImportValue DbRdsEndpointAddress
+    DB_NAME: !ImportValue DbRdsName
+    DB_USER: !ImportValue DbRdsUser
+    DB_PASS: !ImportValue DbRdsPass
+    # Service Now
+    EVENT_CLASS: ${self:service}
+    NODE: ${opt:stage,'dev'}
+    SNS_TOPIC: !ImportValue SNSEventMgmtTopic
+    # BugEventProcessor
+    SERVICE_SNS_TOPIC_ARN: !ImportValue SNSServiceTriggerTopic
+    BUG_EVENT_PROCESSOR_SERVICE_NAME: bugEventProcessor
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "secretsmanager:GetSecretValue"
+            - "secretsmanager:GetResourcePolicy"
+            - "secretsmanager:DescribeSecret"
+            - "secretsmanager:ListSecretVersionIds"
+            - "secretsmanager:PutSecretValue"
+          Resource:
+            - "arn:aws:secretsmanager:*"
+        - Effect: Allow
+          Action:
+            - "SNS:Publish"
+          Resource:
+            - !ImportValue SNSEventMgmtTopic
+            - !ImportValue SNSServiceTriggerTopic
+
+
+functions:
+  fortinet-bug-svc:
+    handler: vendor_fortinet_bug_service.initiate
+    memorySize: 1024
+    timeout: 900
+    reservedConcurrency: 1
+    events:
+      - schedule:
+          rate: cron(15 * * * ? *)
+          enabled: true
+      - sns:
+          arn: !ImportValue SNSServiceTriggerTopic
+          topicName: SNSServiceTriggerTopic
+          filterPolicy:
+            service:
+              - fortinet
+
+# for Python runtime
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    dockerizePip: true

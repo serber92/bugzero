@@ -1,0 +1,510 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "NetappDashbugDashsvcLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/vendor-netapp-api-dev-netapp-bug-svc"
+      }
+    },
+    "TestDashcredsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/vendor-netapp-api-dev-test-creds"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "vendor-netapp-api",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/vendor-netapp-api-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/vendor-netapp-api-dev*:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "secretsmanager:GetSecretValue",
+                    "secretsmanager:GetResourcePolicy",
+                    "secretsmanager:DescribeSecret",
+                    "secretsmanager:ListSecretVersionIds",
+                    "secretsmanager:PutSecretValue"
+                  ],
+                  "Resource": "arn:aws:secretsmanager:*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "SNS:Publish"
+                  ],
+                  "Resource": {
+                    "Fn::ImportValue": "SNSEventMgmtTopic"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "vendor-netapp-api",
+              "dev",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "EnterpriseLogAccessIamRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::802587217904:root"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "ServerlessEnterprise-78265dc7-7413-41eb-9b34-ef83b8d7da43"
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "LogFilterAccess",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:FilterLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "NetappDashbugDashsvcLogGroup",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "TestDashcredsLogGroup",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "NetappDashbugDashsvcLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/vendor-netapp-api/dev/1644439785031-2022-02-09T20:49:45.031Z/vendor-netapp-api.zip"
+        },
+        "Handler": "s_netapp_bug_svc.handler",
+        "Runtime": "python3.7",
+        "FunctionName": "vendor-netapp-api-dev-netapp-bug-svc",
+        "MemorySize": 1024,
+        "Timeout": 900,
+        "Environment": {
+          "Variables": {
+            "STAGE": "dev",
+            "BUGS_TABLE": "bugs",
+            "MANAGED_PRODUCTS_TABLE": "managedProducts",
+            "SETTINGS_TABLE": "settings",
+            "SERVICES_TABLE": "services",
+            "SERVICE_EXECUTION_TABLE": "serviceExecutions",
+            "VENDORS_TABLE": "vendors",
+            "DB_PORT": {
+              "Fn::ImportValue": "DbRdsEndpointPort"
+            },
+            "DB_HOST": {
+              "Fn::ImportValue": "DbRdsEndpointAddress"
+            },
+            "DB_NAME": {
+              "Fn::ImportValue": "DbRdsName"
+            },
+            "DB_USER": {
+              "Fn::ImportValue": "DbRdsUser"
+            },
+            "DB_PASS": {
+              "Fn::ImportValue": "DbRdsPass"
+            },
+            "EVENT_CLASS": "vendor-netapp-api",
+            "NODE": "dev",
+            "SNS_TOPIC": {
+              "Fn::ImportValue": "SNSEventMgmtTopic"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::ImportValue": "VPCSecurityGroupId"
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::ImportValue": "PrivateSubnet1"
+            },
+            {
+              "Fn::ImportValue": "PrivateSubnet2"
+            }
+          ]
+        },
+        "ReservedConcurrentExecutions": 1
+      },
+      "DependsOn": [
+        "NetappDashbugDashsvcLogGroup"
+      ]
+    },
+    "TestDashcredsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/vendor-netapp-api/dev/1644439785031-2022-02-09T20:49:45.031Z/vendor-netapp-api.zip"
+        },
+        "Handler": "s_test_creds.handler",
+        "Runtime": "python3.7",
+        "FunctionName": "vendor-netapp-api-dev-test-creds",
+        "MemorySize": 256,
+        "Timeout": 300,
+        "Environment": {
+          "Variables": {
+            "STAGE": "dev",
+            "BUGS_TABLE": "bugs",
+            "MANAGED_PRODUCTS_TABLE": "managedProducts",
+            "SETTINGS_TABLE": "settings",
+            "SERVICES_TABLE": "services",
+            "SERVICE_EXECUTION_TABLE": "serviceExecutions",
+            "VENDORS_TABLE": "vendors",
+            "DB_PORT": {
+              "Fn::ImportValue": "DbRdsEndpointPort"
+            },
+            "DB_HOST": {
+              "Fn::ImportValue": "DbRdsEndpointAddress"
+            },
+            "DB_NAME": {
+              "Fn::ImportValue": "DbRdsName"
+            },
+            "DB_USER": {
+              "Fn::ImportValue": "DbRdsUser"
+            },
+            "DB_PASS": {
+              "Fn::ImportValue": "DbRdsPass"
+            },
+            "EVENT_CLASS": "vendor-netapp-api",
+            "NODE": "dev",
+            "SNS_TOPIC": {
+              "Fn::ImportValue": "SNSEventMgmtTopic"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::ImportValue": "VPCSecurityGroupId"
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::ImportValue": "PrivateSubnet1"
+            },
+            {
+              "Fn::ImportValue": "PrivateSubnet2"
+            }
+          ]
+        },
+        "ReservedConcurrentExecutions": 1
+      },
+      "DependsOn": [
+        "TestDashcredsLogGroup"
+      ]
+    },
+    "TestDashcredsLambdaVersionZ1YvwFFzYJrt9bdO1W7WZVrx0jYXckHwwAftgFCugo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "TestDashcredsLambdaFunction"
+        },
+        "CodeSha256": "NwsduSw4KEKp/1Z0ztwbmS2swh1ggEgRGon+qQb6HuE="
+      }
+    },
+    "NetappDashbugDashsvcLambdaVersionEsoJCG5LAICV2g763ZXDUsHiPnmAezzXqiVtHIYsc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "NetappDashbugDashsvcLambdaFunction"
+        },
+        "CodeSha256": "NwsduSw4KEKp/1Z0ztwbmS2swh1ggEgRGon+qQb6HuE="
+      }
+    },
+    "NetappDashbugDashsvcEventsRuleSchedule1": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "ScheduleExpression": "cron(15 * * * ? *)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "NetappDashbugDashsvcLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": "netapp-bug-svcSchedule"
+          }
+        ]
+      }
+    },
+    "NetappDashbugDashsvcLambdaPermissionEventsRuleSchedule1": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "NetappDashbugDashsvcLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "NetappDashbugDashsvcEventsRuleSchedule1",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "CWLSubFilterNetappDashbugDashsvcLogGroupUsEast1": {
+      "Type": "AWS::Logs::SubscriptionFilter",
+      "Properties": {
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:78265dc7-7413-41eb-9b34-ef83b8d7da43#WhNylGx7PF18BNB2qq#vendor-netapp-api#dev",
+        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+        "LogGroupName": {
+          "Ref": "NetappDashbugDashsvcLogGroup"
+        }
+      }
+    },
+    "CWLSubFilterTestDashcredsLogGroupUsEast1": {
+      "Type": "AWS::Logs::SubscriptionFilter",
+      "Properties": {
+        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:78265dc7-7413-41eb-9b34-ef83b8d7da43#WhNylGx7PF18BNB2qq#vendor-netapp-api#dev",
+        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
+        "LogGroupName": {
+          "Ref": "TestDashcredsLogGroup"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-vendor-netapp-api-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "EnterpriseLogAccessIamRole": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EnterpriseLogAccessIamRole",
+          "Arn"
+        ]
+      },
+      "Export": {
+        "Name": "sls-vendor-netapp-api-dev-EnterpriseLogAccessIamRole"
+      }
+    },
+    "TestDashcredsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "TestDashcredsLambdaVersionZ1YvwFFzYJrt9bdO1W7WZVrx0jYXckHwwAftgFCugo"
+      },
+      "Export": {
+        "Name": "sls-vendor-netapp-api-dev-TestDashcredsLambdaFunctionQualifiedArn"
+      }
+    },
+    "NetappDashbugDashsvcLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "NetappDashbugDashsvcLambdaVersionEsoJCG5LAICV2g763ZXDUsHiPnmAezzXqiVtHIYsc"
+      },
+      "Export": {
+        "Name": "sls-vendor-netapp-api-dev-NetappDashbugDashsvcLambdaFunctionQualifiedArn"
+      }
+    }
+  }
+}

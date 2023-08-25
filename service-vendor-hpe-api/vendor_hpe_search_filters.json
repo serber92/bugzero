@@ -1,0 +1,152 @@
+{
+  "vendorSearchFilters": {
+    "Networking": [
+      {
+        "filterFieldName": "kmpmname",
+        "filterKw": [
+          "switch",
+          " AP",
+          "Access Point",
+          "router",
+          "controller",
+          "appliance",
+          "wireless client bridge"
+        ],
+        "filterType": "include"
+      },
+      {
+        "filterFieldName": "kmpmname",
+        "filterKw": [
+          "(RW)",
+          "(IS)",
+          "(JP)",
+          "(EG)",
+          "(IL)",
+          "(CN)",
+          "Lic",
+          "License",
+          "LTU"
+        ],
+        "filterType": "exclude"
+      }
+    ],
+    "Servers": [
+      {
+        "filterFieldName": "kmpmname",
+        "filterKw": [
+          "Server",
+          "System",
+          "Blade",
+          "Servers",
+          "Systems",
+          "Chassis",
+          "Workstation",
+          "Switch",
+          "Controller",
+          "Director",
+          "Accelerator",
+          "Gateway",
+          "Storage Expansion",
+          "Svr"
+        ],
+        "filterType": "include"
+      },
+      {
+        "filterFieldName": "kmpmname",
+        "filterKw": [
+          " G2",
+          " G3",
+          " G4",
+          " G5",
+          " G6",
+          " G7",
+          " SGI"
+        ],
+        "filterType": "exclude"
+      },
+      {
+        "filterFieldName": "kmpmlevel4name",
+        "filterKw": [
+          "Options",
+          "Accesories",
+          "Racks",
+          "Shelves",
+          "Compliance",
+          "Bundles",
+          "Concentrators",
+          "Rackable",
+          "Other"
+        ],
+        "filterType": "exclude"
+      }
+    ],
+    "Storage": [
+      {
+        "filterFieldName": "kmpmname",
+        "filterKw": [
+          "server",
+          "switch",
+          "tape",
+          "system",
+          "array",
+          "backup",
+          "library",
+          "NAS",
+          "gateway",
+          "blade",
+          "controller",
+          "MSA",
+          "enclosure",
+          "station",
+          "converged",
+          "storage"
+        ],
+        "filterType": "include"
+      },
+      {
+        "filterFieldName": "kmpmlevel4name",
+        "filterKw": [
+          "tape drives",
+          "tape libraries"
+        ],
+        "filterType": "include"
+      },
+      {
+        "filterFieldName": "kmpmname",
+        "filterKw": [
+          "software",
+          "manager",
+          "Europe",
+          "Japan",
+          "(JP)",
+          "(EU)",
+          "(AU)",
+          "(LA)",
+          "(AP)",
+          "G3",
+          "G4",
+          "G5",
+          "Asia",
+          "China",
+          "StorageWorks",
+          "LeftHand",
+          "warranty",
+          "kit",
+          "LTU",
+          "RTU",
+          "SGI",
+          "McData",
+          "Compaq",
+          " DAT ",
+          "DDS",
+          "pallet",
+          "Surestore",
+          "Digital",
+          "H3C",
+          " 9000"
+        ],
+        "filterType": "exclude"
+      }
+    ]
+  }
+}

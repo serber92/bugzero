@@ -1,0 +1,26 @@
+org: cfosterbz
+app: bugzero
+service: managed-product-sync
+provider:
+  name: aws
+  stage: ${opt:stage,'dev'}
+  runtime: nodejs12.x
+  # vpc:
+  #   securityGroupIds:
+  #     - { "Fn::ImportValue": "${self:provider.stage}-VPCSecurityGroup" }
+  #   subnetIds:
+  #     - { "Fn::ImportValue": "${self:provider.stage}-PrivateSubnet1" }
+  #     - { "Fn::ImportValue": "${self:provider.stage}-PrivateSubnet2" }
+  environment:
+    # PRODUCTS_TABLE: ${output:common.managedProductsTableName}
+    # SETTINGS_TABLE: ${output:common.settingsTableName}
+    # VENDOR_PRODUCTS_TABLE: ${output:common.vendorProductsTableName}
+    # VENDORS_TABLE: ${output:common.vendorsTableName}
+    # VENDOR_PRODUCT_VERSIONS_TABLE: ${output:common.vendorProductVersionsTableName}
+
+functions:
+  bugEventProcessor:
+    handler: handler.managedProductSync
+    timeout: 600
+    events:
+      - schedule: rate(1 hour)

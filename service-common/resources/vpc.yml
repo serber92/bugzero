@@ -1,0 +1,179 @@
+Resources:
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-VPC"]]
+      CidrBlock: 10.10.10.0/16
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-subnet-priv-1"]]
+      AvailabilityZone: us-east-1a
+      CidrBlock: 10.10.1.0/24
+      VpcId:
+        Ref: Vpc
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-subnet-priv-2"]]
+      AvailabilityZone: us-east-1b
+      CidrBlock: 10.10.2.0/24
+      VpcId:
+        Ref: Vpc
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-subnet-pub-1"]]
+      AvailabilityZone: us-east-1c
+      CidrBlock: 10.10.21.0/24
+      VpcId:
+        Ref: Vpc
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["", [!Ref "AWS::StackName", "-subnet-pub-2"]]
+      AvailabilityZone: us-east-1d
+      CidrBlock: 10.10.22.0/24
+      VpcId:
+        Ref: Vpc
+  Eip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - Eip
+          - AllocationId
+      SubnetId:
+        Ref: PublicSubnet1
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: Vpc
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: NatGateway
+  SubnetRouteTableAssociationPrivate1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PrivateSubnet1
+      RouteTableId:
+        Ref: PrivateRouteTable
+  SubnetRouteTableAssociationPrivate2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PrivateSubnet2
+      RouteTableId:
+        Ref: PrivateRouteTable
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: Vpc
+      InternetGatewayId:
+        Ref: InternetGateway
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: Vpc
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: InternetGateway
+  SubnetRouteTableAssociationPublic1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PublicSubnet1
+      RouteTableId:
+        Ref: PublicRouteTable
+  SubnetRouteTableAssociationPublic2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PublicSubnet2
+      RouteTableId:
+        Ref: PublicRouteTable
+  VPCSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: vpc-security-gryup
+      GroupDescription: Allow access to reach the internet
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+          # FromPort: 5432
+          # ToPort: 5432
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      VpcId:
+        Ref: Vpc
+
+Outputs:
+  # Export ARN's for other services
+  PrivateSubnet1:
+    Value:
+      Ref: PrivateSubnet1
+    Export:
+      Name: PrivateSubnet1
+  PrivateSubnet2:
+    Value:
+      Ref: PrivateSubnet2
+    Export:
+      Name: PrivateSubnet2
+  PublicSubnet1:
+    Value:
+      Ref: PublicSubnet1
+    Export:
+      Name: PublicSubnet1
+  PublicSubnet2:
+    Value:
+      Ref: PublicSubnet2
+    Export:
+      Name: PublicSubnet2
+  VPCSecurityGroup:
+    Value:
+      Ref: VPCSecurityGroup
+    Export:
+      Name: VPCSecurityGroup
+  VPCId:
+    Value:
+      Ref: Vpc
+    Export:
+      Name: VPCId
+  VPCSecurityGroupId:
+    Value:
+      Fn::GetAtt:
+        - VPCSecurityGroup
+        - GroupId
+    Export:
+      Name: VPCSecurityGroupId

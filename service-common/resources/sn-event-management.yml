@@ -1,0 +1,9 @@
+Outputs:
+  bzSnPortalUrlExport:
+    Value: ${param:BZ_SN_PORTAL_URL}
+    Export:
+      Name: bzSnPortalUrl
+  bzSnPortalBasicAuthKeyExport:
+    Value: ${param:BZ_SN_PORTAL_BASIC_AUTH_KEY}
+    Export:
+      Name: bzSnPortalBasicAuthKey

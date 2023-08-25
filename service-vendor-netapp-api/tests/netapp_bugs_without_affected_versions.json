@@ -1,0 +1,172 @@
+[
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2003-08-29T20:13:45Z",
+    "description" : "Description of problem:\n\nOn boot, ypbind occasionally grabs port 631/udp, blocking CUPS from binding to\nthe port.  This is a glibc problem because ypbind is a RPC service that has its\nport assigned dynamically through bindresvport().\n\nThe code in libc/sunrpc/bindrsvprt.c shows the port number is assigned purely\nbased on the PID of the ypbind process, something like\n\n  port = (PID % 424) + 600\n\nThe PID seems to vary slightly from reboot to reboot, but generally is in the\n870s on the machine in question, resulting in ports assigned in the vicinity of\n630.  CUPS (actually, IPP) has ports 631/tcp and 631/udp reserved.  NIS starts\nfirst, so it wins, and since CUPS has a reserved Well Known Port, it can't\nrelocate and loses.\n\nVersion-Release number of selected component (if applicable):\nglibc-2.3.2-27.9\n\nHow reproducible:\nDepends entirely on the PID handed to ypbind on boot, and the exact set of\nservices configured affects this.  \n\nSuggested Fix:\nThe glibc algorithm already blacklists all reserved ports below 600, presumably\nto avoid this exact problem.  Consider altering the code to blacklist 5 to 8\nadditional ports in the 600-1023 range that are or may be in common use:\n\n  631     (IPP == CUPS)\n  636     (LDAPS)\n  749     (Kerberos V kadmin)\n  873     (rsyncd)\n  992-995 (SSL-enabled telnet, IMAP, IRC, and POP3)\n\nThe ports lost could be recovered, if desired, by allowing ports in the 590-600\nrange to be assigned by bindrsvprt().",
+    "id" : 103401,
+    "last_change_time" : "2021-09-17T11:41:59Z",
+    "longdescs.count" : 143,
+    "op_sys" : "Linux",
+    "priority" : "urgent",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: [RFE] RPC (on boot) port selection collisions between various applications",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2010-03-25T09:14:37Z",
+    "description" : "Description of problem:\n\nWhilst trying to improve the caching of some DNS A records, we found that nscd doesn't appear to cache DNS responses containing multiple A records. I eventually found a reference in the source code to this, but this was not made explicit in the documentation as far as I could see.\n\nBeing curious, I wondered if the same lack of caching applied when a DNS response included one A record and potentially multiple AAAA records - which might be a more likely scenario in a future dual-stack universe.\n\nAfter running several tests, I came to the conclusion that it all depends how you ask the question.\n\nIf one queries for both A and AAAA records at the same time using getaddrinfo(AF_UNSPEC), then all the answers are apparently always cached, even if multiple A or AAAA records exist.\n\nIf one queries for JUST A records using getaddrinfo(AF_INET), or JUST AAAA records using getaddrinfo(AF_INET6), then the answers are not cached if multiple records are returned.\n\nIn the source code, I think I can see that nscd's getaddrinfo() hook actually calls gethostbyname() or gethostbyname2() instead when called with AF_INET or AF_INET6 as the preferred address family, and the gethostbyname/gethostbyname2 code tree employs a different caching policy.\n\nIn the ideal world, I feel, nscd should be able to cache any A and AAAA records irrespective of how the question is made, AND it ought to emulate/preserve the DNS Round Robin feature so that a balancing functionality can be maintained.\n\nIf DNSRR capability is difficult to preserve, a sysadmin might prefer to use lwresd, but I don't believe one can hook into the lwres libraries via nsswitch.conf, which is an awful shame. Can this be fixed?\n\nIf a proper cache-always+DNSRR fix is too tricky for the present, it might be more consistent in the meantime to get nscd to NOT cache a getaddrinfo(AF_UNSPEC) response if there are either multiple A records OR multiple AAAA records, ( but DO cache if there is one A record and one AAAA record ).\n\n\nVersion-Release number of selected component (if applicable):\n\nnscd-2.5-42.el5_4.3\n\n\nHow reproducible:\n\nUse ssh against a DNS name which has multiple A and AAAA records, but where none of the hosts referenced are running sshd.\n\nAt the same time, monitor DNS traffic from the client host, with nscd running.\n\n\"ssh hostname\" will use getaddrinfo(AF_UNSPEC) to ask for all A and AAAA records, \"ssh -4 hostname\" will use getaddrinfo(AF_INET) to ask for just A records, and \"ssh -6 hostname\" will use getaddrinfo(AF_INET6) to ask for just AAAA records.\n\nProbing nscd/DNS with the different ssh requests will show how some DNS responses are cached, and some not.\n\nThe additional test is to use the same \"ssh\" calls against hostnames corresponding to one A record and one AAAA record. This should result in the answers always being cached.",
+    "id" : 576801,
+    "last_change_time" : "2021-09-17T12:06:46Z",
+    "longdescs.count" : 25,
+    "op_sys" : "Linux",
+    "priority" : "low",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: Inconsistency of IPv4/IPv6 caching with getaddrinfo / nscd",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2010-06-18T06:49:47Z",
+    "description" : "=Comment: #0=================================================\nDarren V. Hart <dvhltc@us.ibm.com> - \nWhen using a PTHREAD_PRIO_INHERIT mutex with a condvar, the pthread_cond* calls can still cause an\nunbounded priority inversion via the internal condvar lock. The POSIX specification doesn't provide\na mechanism to specify the protocol of the condvar.\n\nWe would like to do this at runtime, but unfortunately it is legal to call pthread_cond_signal() or\npthread_cond_broadcast() without first waiting on the lock, so the mutex type may not be known the\nfirst time the condvar is used.\n\nA new API, pthread_condattr_setprotocol_np() and pthread_condattr_getprotocol_np(), would allow the\nuser to create a PTHREAD_PRIO_INHERIT condvar. This would use a PTHREAD_PRIO_INHERIT mutex for the\ninternal condvar lock, eliminating the potential for hitting an unbounded priority inversion on that\nlock.\n\nThis topic was initially discussed here:\nhttp://sources.redhat.com/ml/libc-alpha/2010-01/msg00011.html\n\nAnd again here:\nhttp://sources.redhat.com/ml/libc-alpha/2010-02/msg00089.html\n\nMore details about this bug, including a prototype C implementation including make check glibc\ntestcases is available on libc-alpha, and is also being tracked on the glibc bugzilla here:\n\nhttp://sourceware.org/bugzilla/show_bug.cgi?id=11588\n\nBefore investing more time in testcases or optimizations, a consensus needs to be had regarding the\nproposed API.",
+    "id" : 605506,
+    "last_change_time" : "2021-09-17T12:12:12Z",
+    "longdescs.count" : 10,
+    "op_sys" : "All",
+    "priority" : "low",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: [RFE] pthread condvars are not priority inheritance aware",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2012-08-24T16:27:45Z",
+    "description" : "Description of problem:\n\nAs noted upstream bug:\n  http://sourceware.org/bugzilla/show_bug.cgi?id=13935\n\nthe currently used domain search / domain creation mechanism in glibc does not allow to turn the implicit domain expansion to be turned off, resulting in security flaw:\n  https://bugzilla.redhat.com/show_bug.cgi?id=812394\n\nSince this might be widely used functionality it is not possible directly to switch this behaviour off (due regressions).\n\nThus as such an option should be implemented, which would allow the system administrator to specify which way of glibc's behaviour (if no domain entry was present, if glibc should determine the domain part from the local hostname as returned by gethostbyname(2) and consider for the domain part to be everything past the first '.' or not) is the desired one.\n\nVersion-Release number of selected component (if applicable):\nglibc-2.15-47.el7\n\nHow reproducible:\nAlways\n\nSteps to Reproduce:\n1. See http://centos.org/modules/newbb/viewtopic.php?topic_id=36693&forum=59\nfor an example strace log\n  \nActual results:\nCurrently it is not possible to turn the default glibc's 'domain composition' behaviour to turn off.\n\nExpected results:\nAn /etc/resolv.conf option should be added which once applied would allow to turn the default 'domain composition' behaviour to turn off.\n\nAdditional info:\nFrom the resolv.conf manual page:\n\nMost queries for names within this domain can use short names relative to the local domain.  If no domain entry is present, the domain is determined from the local hostname returned by gethostname(2); the domain part is taken to  be  everything  after the first '.'.  Finally, if the hostname does not contain a domain part, the root domain is assumed.\n\nSee also:\nhttps://bugzilla.redhat.com/show_bug.cgi?id=812394\nhttp://serverfault.com/questions/341383/possible-nxdomain-hijacking",
+    "id" : 851671,
+    "last_change_time" : "2021-09-17T12:06:46Z",
+    "longdescs.count" : 9,
+    "op_sys" : "Unspecified",
+    "priority" : "unspecified",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: [RFE] Provide ability / mechanism / option to turn off the domain searches in glibc",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2013-06-20T12:56:46Z",
+    "description" : "Description of problem:\n\nIt seems printf() doesn't properly handle pthread cancellation requests.\n\nAccording to http://pubs.opengroup.org/onlinepubs/9699919799//functions/V2_chap02.html printf is either a cancellation point, or it's not allowed to be a cancellation point, in either case it should not leave stdout in an inconsistent state.\n\nVersion-Release number of selected component (if applicable):\nglibc-2.12-1.80.el6_3.7.i686\n\nSteps to Reproduce:\nThe following program, compiled with g++ t.cpp -pthread\n#include <stdio.h>\n#include <unistd.h>\n#include <pthread.h>\n\nvoid *my_routine(void *arg) {\n  int i;\n  for (i = 0; i < 200; i++) {\n    printf(\"%d\\n\", i);\n  }\n  return NULL;\n}\n\nint main(void) {\n  pthread_t thread;\n  if (pthread_create(&thread, NULL, my_routine, NULL)) {\n    fprintf(stderr, \"Cannot create pthread\\n\");\n    return 1;\n  }\n  usleep(0);\n  pthread_cancel(thread);\n  pthread_join(thread, NULL);\n  //fflush(stdout);\n  sleep(1);\n  return 0;\n}\n\nwill occasionally print a number twice, suggesting that printf() has been cancelled in mid operation - not properly cleaning up its internals, e.g. as in this output:\n\n$ ./a.out \n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n13",
+    "id" : 976368,
+    "last_change_time" : "2021-09-17T12:12:19Z",
+    "longdescs.count" : 13,
+    "op_sys" : "Linux",
+    "priority" : "unspecified",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: printf() not  properly handling pthread cancelling",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2013-07-31T19:46:15Z",
+    "description" : "Description of problem:\nDuring the process of upgrading glibc, something in the upgrade updates the /lib64/ld-linux-x86-64.so.2 symlink to point to the latest ld-*.so.  Presumably, this is done so that applications can link against a fixed name (the symlink) and automatically use the latest and greatest ld, rather than having to be recompiled when ld bumps version numbers with back-compatible content.  However, the algorithm used in determining the latest .so is rather puny, in that it will happily pick up the wrong file, even a non-executable; once this happens, any attempt to exec an application that was linked against the ld-linux-x86-64.so.2 name will fail.\n\nBelow, I'll demonstrate the problem in a safe manner, but I encountered it in a situation where my system was impossible to boot on its own (the kernel panicked when it could not exec the init process).  I was able to fix the problem by recreating a proper symlink when booting into a rescue cd, mounting the right partition, and fixing the symlink while deleting the problematic filename (in my case, I had done a 'cp ld-2.12.so{,.bak}' prior to a 'yum update', in order to be able to more quickly toggle between two versions of glibc for testing whether a particular problem had been fixed, but my testing was thwarted when post-upgrade, processes wouldn't run because the symlink had been redirected to the non-executable copy).\n\nVersion-Release number of selected component (if applicable):\nglibc-2.12-1.127.el6.x86_64\n\nHow reproducible:\n100%\n\nSteps to Reproduce:\n1. all steps as root: cd /lib64\n2. ls -l ld-*\n3. ln ld-2.12.so{,.bak}\n4. yum reinstall glibc -y\n5. ls -l ld-*\n[to undo the damage]\n# ln -s ld-2.12.so ld-linux-x86-64.so.2a\n# chcon --ref ld-linux-x86-64.so.2{,a}\n# mv ld-linux-x86-64.so.2{a,}\nmv: overwrite `ld-linux-x86-64.so.2'? y\n# rm ld-2.12.so.bak \nrm: remove regular file `ld-2.12.so.bak'? y\n\n\nActual results:\n2.\n# ls -l ld-*\n-rwxr-xr-x. 1 root root 154520 Jul 26 21:24 ld-2.12.so\nlrwxrwxrwx. 1 root root     10 Jul 31 13:09 ld-linux-x86-64.so.2 -> ld-2.12.so\nlrwxrwxrwx. 1 root root     20 Oct 19  2012 ld-lsb-x86-64.so -> ld-linux-x86-64.so.2\nlrwxrwxrwx. 1 root root     20 Dec  7  2012 ld-lsb-x86-64.so.3 -> ld-linux-x86-64.so.2\n\n5.\n# ls -l ld-*\n-rwxr-xr-x. 1 root root 154520 Jul 26 21:24 ld-2.12.so\n-rwxr-xr-x. 1 root root 154520 Jul 26 21:24 ld-2.12.so.bak\nlrwxrwxrwx. 1 root root     14 Jul 31 13:33 ld-linux-x86-64.so.2 -> ld-2.12.so.bak\nlrwxrwxrwx. 1 root root     20 Oct 19  2012 ld-lsb-x86-64.so -> ld-linux-x86-64.so.2\nlrwxrwxrwx. 1 root root     20 Dec  7  2012 ld-lsb-x86-64.so.3 -> ld-linux-x86-64.so.2\n\nOops - the symlink has been redirected to ld-2.12.so.bak, merely because that filename matched the ld-*so* glob and comes later than ld-2.12.so; there was no check for whether the redirected symlink points to an executable file, or even if the file is a version of ld.so by contents.\n\nExpected results:\nin step 5, the ld-linux-x86-64.so.2 symlink should not be redirected.  I don't care if its timestamp got updated because the link was removed and recreated, but I do care that it still points to the version of ld-*.so shipped by the rpm, and not some random ld-*.so.* that I left as pollution in the directory.\n\nAdditional info:\nTo make your system unusable and unbootable, replace step 3 with: 'cat ld-2.12.so > ld-2.12.so.bak', and watch as step 4 hits some spectacular failures when it can no longer exec postinstall scriptlets, as well as pretty much else on the system being hosed if it tries to exec a new process.  If you do this, I hope you're comfortable with using a rescue cd to repair the damage.",
+    "id" : 990706,
+    "last_change_time" : "2021-09-17T12:06:46Z",
+    "longdescs.count" : 19,
+    "op_sys" : "Unspecified",
+    "priority" : "unspecified",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: upgrade creates bogus /lib64/ld-linux-x86-64.so.2 link",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2013-11-06T21:27:34Z",
+    "description" : "Description of problem:\nMaybe this is stupid question and this bug will be closed immediately, but I need to ask/report. My system is completely IPv6 disabled* (I have no IPv6 address assigned to any NW interface at all). Why the resolver all the time requesting AAAA records? It seems that IPv6 address will not be used as the IPv6 is completely disabled. Is there any reason for that? \n\n\n*:\nin /etc/sysctl.conf  :  net.ipv6.conf.all.disable_ipv6 = 1\nin /etc/sysconfig/network  : NETWORKING_IPV6=no\nin /etc/sysconfig/network-scripts/ifcfg-eth0 : IPV6INIT=�no�\n\n\nVersion-Release number of selected component (if applicable):\nglibc-2.12-1.107.el6_4.5.x86_64\n\nHow reproducible:\nalways\n\nSteps to Reproduce:\n1. disable IPv6 completely within system\n2. try to resolve any DNS name (or simply use ping toward some DNS name)\n\nActual results:\nresolver will ask for both A and AAAA records\n\nExpected results:\nresolver will ask for both A record only\n\nAdditional info:\nYes, I understand that IPv6 is the feature protocol and soon or later will replace IPv4 completely. I personally implemented and use IPv6 in one organziation and I am happy with it. Please consider this report as pure explanational for me and for all other people with same question.",
+    "id" : 1027452,
+    "last_change_time" : "2021-09-17T12:06:46Z",
+    "longdescs.count" : 37,
+    "op_sys" : "Unspecified",
+    "priority" : "high",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "NEW",
+    "summary" : "glibc: [RFE] Provide mechanism to disable AAAA queries when using AF_UNSPEC on IPv4-only configurations.",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2016-04-22T15:21:19Z",
+    "description" : "Description of problem:\n\nBash seems to, under some circumstances, ignore access(2) for the root user.\n\n# [ -r /etc/shadow ]; echo $?\n0\n\n# [[ -r /etc/shadow ]]; echo $?\n0\n\n# test -r /etc/shadow; echo $?\n0\n\n# /bin/[ -r /etc/shadow ]; echo $?\n1\n\n# /bin/test -r /etc/shadow; echo $?\n1\n\n# cat /etc/shadow\ncat: /etc/shadow: Permission denied\n\n# id -Z\nroot:sysadm_r:sysadm_t:SystemLow-SystemHigh\n\nThe denial happens because with SELinux MLS policy, sysadm_r cannot read /etc/shadow. The access(2) syscall is pretty clear about that:\n\naccess(\"/etc/shadow\", R_OK)             = -1 EACCES (Permission denied)\n\nI'm not sure if this happens due to some form of caching as the issue is NOT present in further bash shells spawned from the login one, not even in 'bash -l' shells.\n\n# test -r /etc/shadow; echo $?\n0\n\n# bash -c 'test -r /etc/shadow; echo $?'\n1\n\n# bash -l\n# test -r /etc/shadow; echo $?\n1\n\nHowever fresh log-ins into the system exhibit the 'wrong' behavior, so I'm not sure about the caching hypothesis. The 'wrong' behavior happens when logging via ssh (normal user, then 'newrole -r sysadm_r', then '/bin/su -') as well as when just logging via TTY (through login(1) straight to bash) or hooking the process, enforcing screen(1) spawn through /etc/profile (like we do for Common Criteria), but I can't think of anything that would be /special/ to the first login shell.\n\nAnother theory would be that the shell is simply spawned in a wrong context and any new commands in the correct one, explaining why builtins behave differently to new spawned bash instances, but that doesn't seem to be true, notice the shell and ps having the same context:\n\n# ps -Z\nLABEL                             PID TTY          TIME CMD\nroot:sysadm_r:sysadm_t:SystemLow-SystemHigh 18580 ttyS0 00:00:00 bash\nroot:sysadm_r:sysadm_t:SystemLow-SystemHigh 18607 ttyS0 00:00:00 ps\n\nFurthermore, exec'ing an access(2) check seems to fail correctly,\n\n# cat access.c\n#include <stdio.h>\n#include <unistd.h>\nint main () { printf(\"%d\\n\", access(\"/etc/shadow\", R_OK)); return 0; }\n\n# gcc access.c -o access\n# test -r /etc/shadow; echo $?\n0\n# ./access\n-1\n# exec ./access\n-1\n\nso it doesn't seem to be an external event granting the initial bash instance extra privileges.\n\nI've also tried to reproduce it on a SELinux targeted system (as the issue appears in MLS), but without success:\n\n# cat test.te\npolicy_module(mypolicy,1.0)\ntype completely_new_t;\nrequire {\n        type unconfined_t;\n        class file { ioctl getattr lock execute execute_no_trans open append write };\n};\nallow unconfined_t completely_new_t : file { ioctl getattr lock execute execute_no_trans open append write };\n\n# ls -Z /testf\n-rwxrwxrwx. root root unconfined_u:object_r:completely_new_t:s0 /testf\n\n# cat /testf\ncat: /testf: Permission denied\n\n# test -r /testf; echo $?\n1\n\n# id -Z\nunconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023\n\nhowever I might have missed some essential privileges in the policy module that would trigger the behavior, so I'm still unsure whether it's a bash issue or not (as bash might have checks for selinux and behave differently).\n\n\n\nVersion-Release number of selected component (if applicable):\nbash-4.2.46-19.el7.x86_64\n\nHow reproducible:\nalways\n\nSteps to Reproduce:\n1. switch a system to SELinux MLS policy (and reboot)\n2. login on TTY as root\n3. test -r /etc/shadow; echo $?       should print 0\n4. /bin/test -r /etc/shadow; echo $?  should print 1\n\nActual results:\nthe test builtin returns 0\n\nExpected results:\nthe test builtin (and [ , [[ ) returns 1\n\nAdditional info:\nCCing mgrepl for the SELinux side of things, to help identify whether this is a SELinux issue or not.",
+    "id" : 1329691,
+    "last_change_time" : "2021-09-17T12:06:46Z",
+    "longdescs.count" : 23,
+    "op_sys" : "Linux",
+    "priority" : "medium",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: fsaccessat emulation gives incorrect results for AT_EACCESS, AT_SYMLINK_NOFOLLOW",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "glibc-2.28-93",
+    "creation_time" : "2016-08-01T05:36:52Z",
+    "description" : "Description of problem:\nI usually set my scripts to use C.UTF-8 on Debian to be able to have C sort style while using UTF, it works everywhere. \nCan you backport that locale to rhel 7?\n\nVersion-Release number of selected component (if applicable):\nglibc-common-2.17-105.el7\n\nHow reproducible:\n\n$ LC_ALL=C.UTF-8 ls\n-bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8): No such file or directory\n-bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8)\n\n\nSteps to Reproduce:\n1.\n2.\n3.\n\nActual results:\n\n\nExpected results:\n\n\nAdditional info:",
+    "id" : 1361965,
+    "last_change_time" : "2021-09-17T12:06:46Z",
+    "longdescs.count" : 33,
+    "op_sys" : "Linux",
+    "priority" : "medium",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "glibc: Fix C.UTF-8 locale source ellipsis expressions",
+    "version" : [
+
+    ],
+    "votes" : 0
+  },
+  {
+    "cf_fixed_in" : "",
+    "creation_time" : "2016-09-02T19:14:52Z",
+    "description" : "In the attached test case, if flush is called, it\nwill fail with the message:\n\nterminate called after throwing an instance of 'std::runtime_error'\n\n  The test case fails because of 'endl'.\n\n  Other kinds of cancellation points work as expected.",
+    "id" : 1372822,
+    "last_change_time" : "2021-09-17T14:35:20Z",
+    "longdescs.count" : 33,
+    "op_sys" : "Linux",
+    "priority" : "medium",
+    "product" : "Red Hat Enterprise Linux 8",
+    "status" : "CLOSED",
+    "summary" : "pthread_cancel inside exception handler and cancel point called from C++ code unexpected behavior",
+    "version" : [
+
+    ],
+    "votes" : 0
+  }
+]

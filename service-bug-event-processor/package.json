@@ -1,0 +1,37 @@
+{
+  "name": "bug-event-processor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "coverage": "./node_modules/.bin/jest --coverage",
+    "test": "./node_modules/.bin/jest",
+    "lint": "./node_modules/.bin/eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.714.0",
+    "axios": "^0.21.1",
+    "glob": "^7.1.7",
+    "html-to-text": "^6.0.0",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.5",
+    "util": "^0.12.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-jest": "^24.3.7",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^4.3.8",
+    "jest": "^27.0.6",
+    "prettier": "^2.2.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run test",
+      "pre-push": "npm run lint"
+    }
+  }
+}

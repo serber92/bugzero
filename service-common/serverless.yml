@@ -1,0 +1,57 @@
+org: cfosterbz
+app: bugzero
+service: common
+frameworkVersion: "3"
+custom:
+  dbName: bugzero
+  bugsTableName: "${self:provider.stage}-bugs-table"
+  managedProductsTableName: "${self:provider.stage}-managed-products-table"
+  vendorMsftBugsTableName: "${self:provider.stage}-vendor-msft-bugs-table"
+  vendorProductsTableName: "${self:provider.stage}-vendor-products-table"
+  vendorProductVersionsTableName: "${self:provider.stage}-vendor-product-versions-table"
+  settingsTableName: "${self:provider.stage}-settings-table"
+  vendorsTableName: "${self:provider.stage}-vendors-table"
+  vpcSecurityGroupId: !GetAtt VPCSecurityGroup.GroupId
+  migrationsPath: "./db/migrations"
+
+provider:
+  name: aws
+  stage: ${opt:stage,'dev'}
+  runtime: nodejs12.x
+  region: us-east-1
+  environment:
+    DB_DIALECT: "mysql"
+    DB_NAME: ${self:custom.dbName}
+    DB_USERNAME: ${param:DB_USER}
+    DB_PASSWORD: ${param:DB_PASS}
+    DB_HOST: !GetAtt Database.Endpoint.Address
+    DB_PORT: 3306
+  vpc:
+    securityGroupIds:
+      - Fn::GetAtt:
+          - VPCSecurityGroup
+          - GroupId
+    subnetIds:
+      - !Ref PrivateSubnet1
+      - !Ref PrivateSubnet2
+      - !Ref PublicSubnet1
+      - !Ref PublicSubnet2
+resources:
+  # VPC
+  - ${file(resources/shared.yml)}
+  - ${file(resources/vpc.yml)}
+  - ${file(resources/rds.yml)}
+  - ${file(resources/code-build.yml)}
+  - ${file(resources/send-grid.yml)}
+  - ${file(resources/sn-event-management.yml)}
+  - ${file(resources/sns.yml)}
+
+outputs:
+  portalUrl: ${param:PORTAL_URL}
+  bugsTableName: "${self:provider.stage}-bugs-table"
+  managedProductsTableName: "${self:provider.stage}-managed-products-table"
+  vendorMsftBugsTableName: "${self:provider.stage}-vendor-msft-bugs-table"
+  vendorProductsTableName: "${self:provider.stage}-vendor-products-table"
+  vendorProductVersionsTableName: "${self:provider.stage}-vendor-product-versions-table"
+  settingsTableName: "${self:provider.stage}-settings-table"
+  vendorsTableName: "${self:provider.stage}-vendors-table"

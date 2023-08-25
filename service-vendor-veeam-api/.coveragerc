@@ -1,0 +1,10 @@
+[run]
+omit =
+    tests/*
+    conftest.py
+# cover files in folder only
+source = .
+[report]
+
+[html]
+directory = report

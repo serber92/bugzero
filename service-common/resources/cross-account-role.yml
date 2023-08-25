@@ -1,0 +1,88 @@
+Resources:
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CrossAccountRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Ref ToolsAccount
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+  Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: CrossAccountPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - codecommit:BatchGetRepositories
+              - codecommit:Get*
+              - codecommit:GitPull
+              - codecommit:List*
+              - codecommit:CancelUploadArchive
+              - codecommit:UploadArchive
+              - s3:*
+            Resource: "*"
+          - Sid: CloudWatchLogsPolicy
+            Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: "*"
+          - Sid: CodeBuildAllow
+            Effect: Allow
+            Action: codebuild:*
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - kms:DescribeKey
+              - kms:GenerateDataKey*
+              - kms:Encrypt
+              - kms:ReEncrypt*
+              - kms:Decrypt
+            Resource:
+              - arn:aws:kms:us-east-1:183721680452:key/4053aee0-f65e-40f6-b4e9-690d2dae9573
+          - Effect: Allow
+            Action:
+              - s3:GetObject*
+              - s3:PutObject
+              - s3:PutObjectAcl
+              - codecommit:ListBranches
+              - codecommit:ListRepositories
+            Resource:
+              - arn:aws:s3:::codepipeline-us-east-1-226446281783/*
+          - Effect: Allow
+            Action:
+              - s3:Get*
+            Resource:
+              - arn:aws:s3:::codepipeline-us-east-1-226446281783/*
+          - Effect: Allow
+            Action:
+              - s3:ListBucket
+            Resource:
+              - arn:aws:s3:::codepipeline-us-east-1-226446281783
+          - Effect: Allow
+            Action:
+              - ec2:CreateNetworkInterface
+              - ec2:DescribeDhcpOptions
+              - ec2:DescribeNetworkInterfaces
+              - ec2:DeleteNetworkInterface
+              - ec2:DescribeSubnets
+              - ec2:DescribeSecurityGroups
+              - ec2:DescribeVpcs
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - ec2:CreateNetworkInterfacePermission
+            Resource: "*"
+      Roles:
+        - !Ref Role

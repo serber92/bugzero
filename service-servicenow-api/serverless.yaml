@@ -1,0 +1,43 @@
+org: cfosterbz
+app: bugzero
+service: service-servicenow-api
+provider:
+  name: aws
+  stage: ${opt:stage,'dev'}
+  runtime: python3.7
+  environment:
+    STAGE: ${opt:stage,'dev'}
+    # tables
+    BZ_SN_PORTAL_URL: !ImportValue bzSnPortalUrl
+    BZ_SN_PORTAL_BASIC_AUTH_KEY: !ImportValue bzSnPortalBasicAuthKey
+    # DB Connectivity
+    DB_PORT: !ImportValue DbRdsEndpointPort
+    DB_HOST: !ImportValue DbRdsEndpointAddress
+    DB_NAME: !ImportValue DbRdsName
+    DB_USER: !ImportValue DbRdsUser
+    DB_PASS: !ImportValue DbRdsPass
+    SNS_TOPIC: !ImportValue SNSEventMgmtTopic
+
+functions:
+  sn-event-mgmt-client:
+    handler: vendor_sn_event_management_client.handler
+    memorySize: 512
+    timeout: 300
+    vpc:
+      securityGroupIds:
+        - !ImportValue VPCSecurityGroupId
+      subnetIds:
+        - !ImportValue PrivateSubnet1
+        - !ImportValue PrivateSubnet2
+    events:
+      - sns:
+          arn: ${self:custom.sns}
+          topicName: SNSEventMgmtTopic
+
+# for Python runtime
+plugins:
+  - serverless-python-requirements
+custom:
+  sns: !ImportValue SNSEventMgmtTopic
+  pythonRequirements:
+    dockerizePip: true

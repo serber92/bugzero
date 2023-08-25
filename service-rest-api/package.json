@@ -1,0 +1,40 @@
+{
+  "name": "bugzero-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jest",
+    "lint": "./node_modules/.bin/eslint ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.42.0",
+    "amazon-cognito-identity-js": "^4.5.1",
+    "axios": "^0.20.0",
+    "crypto-js": "^4.0.0",
+    "glob": "^7.1.7",
+    "http-status": "^1.4.2",
+    "joi": "^17.5.0",
+    "moment": "^2.29.1",
+    "mysql2": "^2.2.5",
+    "path": "^0.12.7",
+    "prop-types": "^15.7.2",
+    "sequelize": "^6.6.5",
+    "util": "^0.12.4",
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.13.0",
+    "eslint-plugin-jest": "^24.3.7",
+    "husky": "^4.3.8",
+    "jest": "^26.6.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run test",
+      "pre-push": "npm run lint"
+    }
+  }
+}

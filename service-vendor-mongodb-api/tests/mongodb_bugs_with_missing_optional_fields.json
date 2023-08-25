@@ -1,0 +1,1435 @@
+[
+  {
+    "title": "[SERVER-55027] Geospatial queries over GeoJSONs return wrong results",
+    "link": "https://jira.mongodb.org/browse/SERVER-55027",
+    "project": {
+      "id": "10000",
+      "key": "SERVER",
+      "content": "Core Server"
+    },
+    "environment": "",
+    "key": {
+      "id": "1643001",
+      "content": "SERVER-55027"
+    },
+    "summary": "Geospatial queries over GeoJSONs return wrong results",
+    "type": {
+      "id": "1",
+      "iconUrl": "https://jira.mongodb.org/secure/viewavatar?size=xsmall&avatarId=14703&avatarType=issuetype",
+      "content": "Bug"
+    },
+    "priority": {
+      "id": "3",
+      "iconUrl": "https://jira.mongodb.org/images/icons/priorities/major.svg",
+      "content": "Major - P3"
+    },
+    "status": {
+      "id": "6",
+      "iconUrl": "https://jira.mongodb.org/images/icons/statuses/closed.png",
+      "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+      "content": "Closed"
+    },
+    "statusCategory": {
+      "id": "3",
+      "key": "done",
+      "colorName": "green"
+    },
+    "assignee": {
+      "username": "edwin.zhou",
+      "content": "Edwin Zhou"
+    },
+    "reporter": {
+      "username": "paveldushev9@gmail.com",
+      "content": "Pavel Antonov"
+    },
+    "labels": "",
+    "created": "Mon, 8 Mar 2021 08:07:38 +0000",
+    "updated": "Tue, 9 Mar 2021 07:17:40 +0000",
+    "resolved": "Mon, 8 Mar 2021 21:02:57 +0000",
+    "version": [
+      "4.2.6",
+      "4.4.4"
+    ],
+    "component": [
+      "Geo",
+      "Index Maintenance",
+      "Querying"
+    ],
+    "attachments": {
+      "attachment": [
+        {
+          "id": "303852",
+          "name": "Screen Shot 2021-03-08 at 3.45.46 PM.png",
+          "size": "1077601",
+          "author": "edwin.zhou",
+          "created": "Mon, 8 Mar 2021 20:52:14 +0000"
+        },
+        {
+          "id": "303711",
+          "name": "image-2021-03-08-08-58-51-496.png",
+          "size": "845301",
+          "author": "paveldushev9@gmail.com",
+          "created": "Mon, 8 Mar 2021 07:58:54 +0000"
+        },
+        {
+          "id": "303710",
+          "name": "image-2021-03-08-08-59-10-527.png",
+          "size": "862664",
+          "author": "paveldushev9@gmail.com",
+          "created": "Mon, 8 Mar 2021 07:59:13 +0000"
+        },
+        {
+          "id": "303709",
+          "name": "image-2021-03-08-09-00-46-731.png",
+          "size": "862092",
+          "author": "paveldushev9@gmail.com",
+          "created": "Mon, 8 Mar 2021 08:00:50 +0000"
+        }
+      ]
+    },
+    "subtasks": "",
+    "customfields": {
+      "customfield": [
+        {
+          "id": "customfield_10050",
+          "key": "com.atlassian.jira.toolkit:comments",
+          "customfieldname": "# Replies",
+          "customfieldvalues": {
+            "customfieldvalue": "2.0"
+          }
+        },
+        {
+          "id": "customfield_10055",
+          "key": "com.atlassian.jira.ext.charting:firstresponsedate",
+          "customfieldname": "Date of 1st Reply",
+          "customfieldvalues": {
+            "customfieldvalue": "Mon, 8 Mar 2021 20:59:55 +0000"
+          }
+        },
+        {
+          "id": "customfield_10052",
+          "key": "com.atlassian.jira.toolkit:dayslastcommented",
+          "customfieldname": "Days since reply",
+          "customfieldvalues": "\n                                        28 weeks, 3 days ago\n    \n                        "
+        },
+        {
+          "id": "customfield_18254",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "Dependencies",
+          "customfieldvalues": {
+            "customfieldvalue": ""
+          }
+        },
+        {
+          "id": "customfield_15850",
+          "key": "com.atlassian.jira.plugins.jira-development-integration-plugin:devsummary",
+          "customfieldname": "Development",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_10057",
+          "key": "com.atlassian.jira.toolkit:lastusercommented",
+          "customfieldname": "Last comment by Customer",
+          "customfieldvalues": {
+            "customfieldvalue": "true"
+          }
+        },
+        {
+          "id": "customfield_10056",
+          "key": "com.atlassian.jira.toolkit:lastupdaterorcommenter",
+          "customfieldname": "Last commenter",
+          "customfieldvalues": {
+            "customfieldvalue": "paveldushev9@gmail.com"
+          }
+        },
+        {
+          "id": "customfield_11151",
+          "key": "com.atlassian.jira.toolkit:LastCommentDate",
+          "customfieldname": "Last public comment date",
+          "customfieldvalues": "\n                            28 weeks, 3 days ago\n                        "
+        },
+        {
+          "id": "customfield_10032",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+          "customfieldname": "Operating System",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10026",
+              "content": "ALL"
+            }
+          }
+        },
+        {
+          "id": "customfield_10051",
+          "key": "com.atlassian.jira.toolkit:participants",
+          "customfieldname": "Participants",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              "edwin.zhou",
+              "paveldushev9@gmail.com"
+            ]
+          }
+        },
+        {
+          "id": "customfield_14254",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Product Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hyygrr:"
+          }
+        },
+        {
+          "id": "customfield_12550",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz02l3:"
+          }
+        },
+        {
+          "id": "customfield_10558",
+          "key": "com.pyxis.greenhopper.jira:gh-global-rank",
+          "customfieldname": "Rank (Obsolete)",
+          "customfieldvalues": {
+            "customfieldvalue": "9223372036854775807"
+          }
+        },
+        {
+          "id": "customfield_10750",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:textarea",
+          "customfieldname": "Steps To Reproduce",
+          "customfieldvalues": {
+            "customfieldvalue": "<p>In the following example, I have some stored polygons located over the Baltic sea (between Sweden and Finland). Whenever I draw a polygon over the area where the polygons lie, they are correctly detected, namely all 609 objects are found. (see query and Screenshot_1)</p>\n\n<p/>\n<div id=\"syntaxplugin\" class=\"syntaxplugin\" style=\"border: 1px dashed #bbb; border-radius: 5px !important; overflow: auto; max-height: 30em;\">\n<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"font-size: 1em; line-height: 1.4em !important; font-weight: normal; font-style: normal; color: black;\">\n\t\t<tbody >\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;  margin-top: 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">db.geojsons.find({</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  location: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    $geoIntersects: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      $geometry: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        type: \"Polygon\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        coordinates: [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">          [ [17.314453, 61.648162], [17.314453, 64.434892], [26.542969, 64.434892], [26.542969, 61.648162], [17.314453, 61.648162], ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   margin-bottom: 10px;  width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">});\n</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t</tbody>\n</table>\n</div>\n<p/>\n<p><span class=\"image-wrap\" style=\"\"><img src=\"https://jira.mongodb.org/secure/attachment/303711/303711_image-2021-03-08-08-58-51-496.png\" width=\"100%\" style=\"border: 0px solid black\" /></span></p>\n\n<p>However, the strange behavior occurs when submitting a wider query polygon a little bit below (see Screenshot 2 and 3 with the corresponding queries).</p>\n\n<p/>\n<div id=\"syntaxplugin\" class=\"syntaxplugin\" style=\"border: 1px dashed #bbb; border-radius: 5px !important; overflow: auto; max-height: 30em;\">\n<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"font-size: 1em; line-height: 1.4em !important; font-weight: normal; font-style: normal; color: black;\">\n\t\t<tbody >\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;  margin-top: 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">db.geojsons.find({</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  location: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    $geoIntersects: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      $geometry: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        type: \"Polygon\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        coordinates: [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">          [ [-4.482422, 61.93895], [46.318359, 61.93895], [46.318359, 58.585436], [-4.482422, 58.585436], [-4.482422, 61.93895], ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   margin-bottom: 10px;  width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">});\n</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t</tbody>\n</table>\n</div>\n<p/>\n\n<p><span class=\"image-wrap\" style=\"\"><img src=\"https://jira.mongodb.org/secure/attachment/303710/303710_image-2021-03-08-08-59-10-527.png\" width=\"100%\" style=\"border: 0px solid black\" /></span></p>\n\n<p>As well as:</p>\n\n<p/>\n<div id=\"syntaxplugin\" class=\"syntaxplugin\" style=\"border: 1px dashed #bbb; border-radius: 5px !important; overflow: auto; max-height: 30em;\">\n<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"font-size: 1em; line-height: 1.4em !important; font-weight: normal; font-style: normal; color: black;\">\n\t\t<tbody >\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;  margin-top: 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">db.geojsons.find({</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  location: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    $geoIntersects: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      $geometry: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        type: \"Polygon\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        coordinates: [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">          [ [-4.482422, 61.93895], [36.318359, 61.93895], [36.318359, 58.585436], [-4.482422, 58.585436], [-4.482422, 61.93895], ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   margin-bottom: 10px;  width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">});\n</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t</tbody>\n</table>\n</div>\n<p/>\n\n<p><span class=\"image-wrap\" style=\"\"><img src=\"https://jira.mongodb.org/secure/attachment/303709/303709_image-2021-03-08-09-00-46-731.png\" width=\"100%\" style=\"border: 0px solid black\" /></span></p>\n\n<p> </p>\n\n<p>Hereby, I also attach three example GeoJSONs that I use:</p>\n\n<p/>\n<div id=\"syntaxplugin\" class=\"syntaxplugin\" style=\"border: 1px dashed #bbb; border-radius: 5px !important; overflow: auto; max-height: 30em;\">\n<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\" style=\"font-size: 1em; line-height: 1.4em !important; font-weight: normal; font-style: normal; color: black;\">\n\t\t<tbody >\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;  margin-top: 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">{</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  type: \"Feature\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  location: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    type: \"Polygon\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    coordinates: [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995991794984, 63.4348461784678],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995991794984, 63.4240745387888],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [21.0236395339339, 63.4240745387888],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [21.0236395339339, 63.4348461784678],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995991794984, 63.4348461784678],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  properties: { acquisitionDate: ISODate(\"2017-01-13T09:10:31Z\") },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  _class: \"com.models.database.GeoJson\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">};</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\">&nbsp;</pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">{</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  type: \"Feature\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  location: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    type: \"Polygon\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    coordinates: [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995993299129, 63.424076492091],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995993299129, 63.413304836971],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [21.0236306669723, 63.413304836971],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [21.0236306669723, 63.424076492091],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995993299129, 63.424076492091],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  properties: { acquisitionDate: ISODate(\"2017-01-13T09:10:31Z\") },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  _class: \"com.models.database.GeoJson\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">};</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\">&nbsp;</pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">{</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  type: \"Feature\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  location: {</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    type: \"Polygon\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    coordinates: [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      [</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995994802004, 63.4133067893598],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995994802004, 63.4025351187936],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [21.0236218074932, 63.4025351187936],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [21.0236218074932, 63.4133067893598],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">        [20.9995994802004, 63.4133067893598],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">      ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">    ],</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  properties: { acquisitionDate: ISODate(\"2017-01-13T09:10:31Z\") },</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">  _class: \"com.models.database.GeoJson\",</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t\t<tr id=\"syntaxplugin_code_and_gutter\">\n\t\t\t\t\t\t<td  style=\" line-height: 1.4em !important; padding: 0em; vertical-align: top;\">\n\t\t\t\t\t<pre style=\"font-size: 1em; margin: 0 10px;   margin-bottom: 10px;  width: auto; padding: 0;\"><span style=\"color: black; font-family: 'Consolas', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important;\">};\n</span></pre>\n\t\t\t</td>\n\t\t</tr>\n\t\t\t</tbody>\n</table>\n</div>\n<p/>\n<p> </p>\n\n<p>Thank you in advance!</p>"
+          }
+        },
+        {
+          "id": "customfield_10053",
+          "key": "com.atlassian.jira.ext.charting:timeinstatus",
+          "customfieldname": "Time In Status",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_14350",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "serverRank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hyy30v:"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "[SERVER-55305] Retryable write may execute more than once if primary had transitioned through rollback to stable",
+    "link": "https://jira.mongodb.org/browse/SERVER-55305",
+    "project": {
+      "id": "10000",
+      "key": "SERVER",
+      "content": "Core Server"
+    },
+    "environment": "",
+    "key": {
+      "id": "1652773",
+      "content": "SERVER-55305"
+    },
+    "summary": "Retryable write may execute more than once if primary had transitioned through rollback to stable",
+    "type": {
+      "id": "1",
+      "iconUrl": "https://jira.mongodb.org/secure/viewavatar?size=xsmall&avatarId=14703&avatarType=issuetype",
+      "content": "Bug"
+    },
+    "priority": {
+      "id": "3",
+      "iconUrl": "https://jira.mongodb.org/images/icons/priorities/major.svg",
+      "content": "Major - P3"
+    },
+    "status": {
+      "id": "6",
+      "iconUrl": "https://jira.mongodb.org/images/icons/statuses/closed.png",
+      "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+      "content": "Closed"
+    },
+    "statusCategory": {
+      "id": "3",
+      "key": "done",
+      "colorName": "green"
+    },
+    "assignee": {
+      "username": "jason.chan",
+      "content": "Jason Chan"
+    },
+    "reporter": {
+      "username": "max.hirschhorn",
+      "content": "Max Hirschhorn"
+    },
+    "labels": "",
+    "created": "Thu, 18 Mar 2021 16:46:25 +0000",
+    "updated": "Tue, 25 May 2021 22:08:47 +0000",
+    "resolved": "Wed, 5 May 2021 13:10:43 +0000",
+    "version": [
+      "4.0.0",
+      "4.2.0",
+      "4.4.0"
+    ],
+    "component": [
+      "Replication",
+      "Sharding"
+    ],
+    "issuelinks": {
+      "issuelinktype": [
+        {
+          "id": "10420",
+          "name": "Backports",
+          "outwardlinks": {
+            "description": "backported by"
+          }
+        },
+        {
+          "id": "10520",
+          "name": "Problem/Incident",
+          "outwardlinks": {
+            "description": "causes"
+          }
+        },
+        {
+          "id": "10012",
+          "name": "Related",
+          "outwardlinks": {
+            "description": "related to",
+            "issuelink": {
+              "issuekey": {
+                "id": "1660948",
+                "content": "SERVER-55578"
+              }
+            }
+          },
+          "inwardlinks": {
+            "description": "is related to",
+            "issuelink": [
+              {
+                "issuekey": {
+                  "id": "1628188",
+                  "content": "SERVER-54626"
+                }
+              },
+              {
+                "issuekey": {
+                  "id": "1649421",
+                  "content": "SERVER-55214"
+                }
+              },
+              {
+                "issuekey": {
+                  "id": "1700958",
+                  "content": "SERVER-56631"
+                }
+              },
+              {
+                "issuekey": {
+                  "id": "1708611",
+                  "content": "SERVER-56796"
+                }
+              },
+              {
+                "issuekey": {
+                  "id": "1333345",
+                  "content": "SERVER-47844"
+                }
+              },
+              {
+                "issuekey": {
+                  "id": "1333350",
+                  "content": "SERVER-47845"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "attachments": "",
+    "subtasks": "",
+    "customfields": {
+      "customfield": [
+        {
+          "id": "customfield_10050",
+          "key": "com.atlassian.jira.toolkit:comments",
+          "customfieldname": "# Replies",
+          "customfieldvalues": {
+            "customfieldvalue": "3.0"
+          }
+        },
+        {
+          "id": "customfield_18555",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "# of Sprints",
+          "customfieldvalues": {
+            "customfieldvalue": "3.0"
+          }
+        },
+        {
+          "id": "customfield_12450",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes",
+          "customfieldname": "Backport Requested",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              {
+                "key": "18953",
+                "content": "v4.4"
+              },
+              {
+                "key": "16775",
+                "content": "v4.2"
+              },
+              {
+                "key": "15640",
+                "content": "v4.0"
+              }
+            ]
+          }
+        },
+        {
+          "id": "customfield_10011",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Backwards Compatibility",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10038",
+              "content": "Fully Compatible"
+            }
+          }
+        },
+        {
+          "id": "customfield_10055",
+          "key": "com.atlassian.jira.ext.charting:firstresponsedate",
+          "customfieldname": "Date of 1st Reply",
+          "customfieldvalues": {
+            "customfieldvalue": "Tue, 27 Apr 2021 14:15:11 +0000"
+          }
+        },
+        {
+          "id": "customfield_10052",
+          "key": "com.atlassian.jira.toolkit:dayslastcommented",
+          "customfieldname": "Days since reply",
+          "customfieldvalues": "\n                                        20 weeks, 2 days ago\n    \n                        "
+        },
+        {
+          "id": "customfield_18254",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "Dependencies",
+          "customfieldvalues": {
+            "customfieldvalue": ""
+          }
+        },
+        {
+          "id": "customfield_15850",
+          "key": "com.atlassian.jira.plugins.jira-development-integration-plugin:devsummary",
+          "customfieldname": "Development",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_17050",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Downstream Team Attention",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "16941",
+              "content": "Not Needed"
+            }
+          }
+        },
+        {
+          "id": "customfield_10057",
+          "key": "com.atlassian.jira.toolkit:lastusercommented",
+          "customfieldname": "Last comment by Customer",
+          "customfieldvalues": {
+            "customfieldvalue": "true"
+          }
+        },
+        {
+          "id": "customfield_10056",
+          "key": "com.atlassian.jira.toolkit:lastupdaterorcommenter",
+          "customfieldname": "Last commenter",
+          "customfieldvalues": {
+            "customfieldvalue": "vivian.ge"
+          }
+        },
+        {
+          "id": "customfield_11151",
+          "key": "com.atlassian.jira.toolkit:LastCommentDate",
+          "customfieldname": "Last public comment date",
+          "customfieldvalues": "\n                            20 weeks, 2 days ago\n                        "
+        },
+        {
+          "id": "customfield_16465",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "Linked BF Score",
+          "customfieldvalues": {
+            "customfieldvalue": "70.0"
+          }
+        },
+        {
+          "id": "customfield_10032",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+          "customfieldname": "Operating System",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10026",
+              "content": "ALL"
+            }
+          }
+        },
+        {
+          "id": "customfield_10051",
+          "key": "com.atlassian.jira.toolkit:participants",
+          "customfieldname": "Participants",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              "xgen-internal-githook",
+              "jason.chan",
+              "max.hirschhorn"
+            ]
+          }
+        },
+        {
+          "id": "customfield_14254",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Product Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz04r3:"
+          }
+        },
+        {
+          "id": "customfield_12550",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz1o33:"
+          }
+        },
+        {
+          "id": "customfield_10558",
+          "key": "com.pyxis.greenhopper.jira:gh-global-rank",
+          "customfieldname": "Rank (Obsolete)",
+          "customfieldvalues": {
+            "customfieldvalue": "9223372036854775807"
+          }
+        },
+        {
+          "id": "customfield_10557",
+          "key": "com.pyxis.greenhopper.jira:gh-sprint",
+          "customfieldname": "Sprint",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              {
+                "id": "4853",
+                "content": "Repl 2021-04-19"
+              },
+              {
+                "id": "4858",
+                "content": "Repl 2021-05-03"
+              },
+              {
+                "id": "4859",
+                "content": "Repl 2021-05-17"
+              }
+            ]
+          }
+        },
+        {
+          "id": "customfield_10053",
+          "key": "com.atlassian.jira.ext.charting:timeinstatus",
+          "customfieldname": "Time In Status",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_14350",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "serverRank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hyzr07:"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "[SERVER-55429] Abort migration earlier when receiver is not cleaning overlapping ranges",
+    "link": "https://jira.mongodb.org/browse/SERVER-55429",
+    "project": {
+      "id": "10000",
+      "key": "SERVER",
+      "content": "Core Server"
+    },
+    "environment": "",
+    "key": {
+      "id": "1655650",
+      "content": "SERVER-55429"
+    },
+    "summary": "Abort migration earlier when receiver is not cleaning overlapping ranges",
+    "type": {
+      "id": "1",
+      "iconUrl": "https://jira.mongodb.org/secure/viewavatar?size=xsmall&avatarId=14703&avatarType=issuetype",
+      "content": "Bug"
+    },
+    "priority": {
+      "id": "3",
+      "iconUrl": "https://jira.mongodb.org/images/icons/priorities/major.svg",
+      "content": "Major - P3"
+    },
+    "status": {
+      "id": "6",
+      "iconUrl": "https://jira.mongodb.org/images/icons/statuses/closed.png",
+      "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+      "content": "Closed"
+    },
+    "statusCategory": {
+      "id": "3",
+      "key": "done",
+      "colorName": "green"
+    },
+    "assignee": {
+      "username": "marcos.grillo",
+      "content": "Marcos José Grillo Ramirez"
+    },
+    "reporter": {
+      "username": "pierlauro.sciarelli",
+      "content": "Pierlauro Sciarelli"
+    },
+    "labels": {
+      "label": "sharding-wfbf-day"
+    },
+    "created": "Mon, 22 Mar 2021 19:57:43 +0000",
+    "updated": "Sat, 11 Sep 2021 00:04:12 +0000",
+    "resolved": "Tue, 29 Jun 2021 15:04:40 +0000",
+    "version": [
+      "4.9.0",
+      "4.0.23",
+      "4.4.4",
+      "4.2.13"
+    ],
+    "component": "Sharding",
+    "issuelinks": {
+      "issuelinktype": [
+        {
+          "id": "10420",
+          "name": "Backports",
+          "outwardlinks": {
+            "description": "backported by"
+          }
+        },
+        {
+          "id": "10011",
+          "name": "Depends",
+          "inwardlinks": {
+            "description": "is depended on by"
+          }
+        },
+        {
+          "id": "10520",
+          "name": "Problem/Incident",
+          "outwardlinks": {
+            "description": "causes",
+            "issuelink": [
+              {
+                "issuekey": {
+                  "id": "1807646",
+                  "content": "SERVER-58240"
+                }
+              },
+              {
+                "issuekey": {
+                  "id": "1833719",
+                  "content": "SERVER-58905"
+                }
+              },
+              {
+                "issuekey": {
+                  "id": "1861563",
+                  "content": "SERVER-59636"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "10012",
+          "name": "Related",
+          "inwardlinks": {
+            "description": "is related to"
+          }
+        }
+      ]
+    },
+    "attachments": "",
+    "subtasks": "",
+    "customfields": {
+      "customfield": [
+        {
+          "id": "customfield_10050",
+          "key": "com.atlassian.jira.toolkit:comments",
+          "customfieldname": "# Replies",
+          "customfieldvalues": {
+            "customfieldvalue": "2.0"
+          }
+        },
+        {
+          "id": "customfield_18555",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "# of Sprints",
+          "customfieldvalues": {
+            "customfieldvalue": "2.0"
+          }
+        },
+        {
+          "id": "customfield_12450",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes",
+          "customfieldname": "Backport Requested",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "21777",
+              "content": "v5.0"
+            }
+          }
+        },
+        {
+          "id": "customfield_10011",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Backwards Compatibility",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10038",
+              "content": "Fully Compatible"
+            }
+          }
+        },
+        {
+          "id": "customfield_10055",
+          "key": "com.atlassian.jira.ext.charting:firstresponsedate",
+          "customfieldname": "Date of 1st Reply",
+          "customfieldvalues": {
+            "customfieldvalue": "Thu, 1 Apr 2021 10:02:55 +0000"
+          }
+        },
+        {
+          "id": "customfield_10052",
+          "key": "com.atlassian.jira.toolkit:dayslastcommented",
+          "customfieldname": "Days since reply",
+          "customfieldvalues": "\n                                        12 weeks, 2 days ago\n    \n                        "
+        },
+        {
+          "id": "customfield_18254",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "Dependencies",
+          "customfieldvalues": {
+            "customfieldvalue": ""
+          }
+        },
+        {
+          "id": "customfield_15850",
+          "key": "com.atlassian.jira.plugins.jira-development-integration-plugin:devsummary",
+          "customfieldname": "Development",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_17052",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:textarea",
+          "customfieldname": "Downstream Changes Summary",
+          "customfieldvalues": {
+            "customfieldvalue": "During a migration, if a range deletion on the recipient shard of an intersecting chunk does not finish in 10 seconds, then the migration will be aborted. This behavior can be changed by increasing or lowering the new server parameter: receiveChunkWaitForRangeDeleterTimeoutM."
+          }
+        },
+        {
+          "id": "customfield_17050",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Downstream Team Attention",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "16942",
+              "content": "Needed"
+            }
+          }
+        },
+        {
+          "id": "customfield_10057",
+          "key": "com.atlassian.jira.toolkit:lastusercommented",
+          "customfieldname": "Last comment by Customer",
+          "customfieldvalues": {
+            "customfieldvalue": "true"
+          }
+        },
+        {
+          "id": "customfield_10056",
+          "key": "com.atlassian.jira.toolkit:lastupdaterorcommenter",
+          "customfieldname": "Last commenter",
+          "customfieldvalues": {
+            "customfieldvalue": "dbeng-pm-bot"
+          }
+        },
+        {
+          "id": "customfield_11151",
+          "key": "com.atlassian.jira.toolkit:LastCommentDate",
+          "customfieldname": "Last public comment date",
+          "customfieldvalues": "\n                            12 weeks, 2 days ago\n                        "
+        },
+        {
+          "id": "customfield_10032",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+          "customfieldname": "Operating System",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10026",
+              "content": "ALL"
+            }
+          }
+        },
+        {
+          "id": "customfield_10051",
+          "key": "com.atlassian.jira.toolkit:participants",
+          "customfieldname": "Participants",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              "xgen-internal-githook",
+              "kaloian.manassiev",
+              "marcos.grillo",
+              "pierlauro.sciarelli"
+            ]
+          }
+        },
+        {
+          "id": "customfield_14254",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Product Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz0mfr:"
+          }
+        },
+        {
+          "id": "customfield_12550",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz6qwv:"
+          }
+        },
+        {
+          "id": "customfield_10558",
+          "key": "com.pyxis.greenhopper.jira:gh-global-rank",
+          "customfieldname": "Rank (Obsolete)",
+          "customfieldvalues": {
+            "customfieldvalue": "9223372036854775807"
+          }
+        },
+        {
+          "id": "customfield_10557",
+          "key": "com.pyxis.greenhopper.jira:gh-sprint",
+          "customfieldname": "Sprint",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              {
+                "id": "4978",
+                "content": "Sharding EMEA 2021-06-14"
+              },
+              {
+                "id": "4979",
+                "content": "Sharding EMEA 2021-06-28"
+              }
+            ]
+          }
+        },
+        {
+          "id": "customfield_17051",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes",
+          "customfieldname": "Teams Impacted",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "16943",
+              "content": "Cloud"
+            }
+          }
+        },
+        {
+          "id": "customfield_10053",
+          "key": "com.atlassian.jira.ext.charting:timeinstatus",
+          "customfieldname": "Time In Status",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_14350",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "serverRank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz08ov:"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "[SERVER-55552] Unreplicated collection idents can get dropped before the drop in the durable catalog becomes both checkpointed and older than the oldest timestamp",
+    "link": "https://jira.mongodb.org/browse/SERVER-55552",
+    "project": {
+      "id": "10000",
+      "key": "SERVER",
+      "content": "Core Server"
+    },
+    "environment": "",
+    "key": {
+      "id": "1660353",
+      "content": "SERVER-55552"
+    },
+    "summary": "Unreplicated collection idents can get dropped before the drop in the durable catalog becomes both checkpointed and older than the oldest timestamp",
+    "type": {
+      "id": "1",
+      "iconUrl": "https://jira.mongodb.org/secure/viewavatar?size=xsmall&avatarId=14703&avatarType=issuetype",
+      "content": "Bug"
+    },
+    "priority": {
+      "id": "3",
+      "iconUrl": "https://jira.mongodb.org/images/icons/priorities/major.svg",
+      "content": "Major - P3"
+    },
+    "status": {
+      "id": "6",
+      "iconUrl": "https://jira.mongodb.org/images/icons/statuses/closed.png",
+      "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+      "content": "Closed"
+    },
+    "statusCategory": {
+      "id": "3",
+      "key": "done",
+      "colorName": "green"
+    },
+    "assignee": {
+      "username": "gregory.wlodarek",
+      "content": "Gregory Wlodarek"
+    },
+    "reporter": {
+      "username": "gregory.wlodarek",
+      "content": "Gregory Wlodarek"
+    },
+    "labels": "",
+    "created": "Fri, 26 Mar 2021 14:48:56 +0000",
+    "updated": "Mon, 23 Aug 2021 20:50:20 +0000",
+    "resolved": "Mon, 23 Aug 2021 20:50:20 +0000",
+    "version": [
+      "5.0.0",
+      "4.4.4",
+      "4.2.13"
+    ],
+    "component": "Storage",
+    "issuelinks": {
+      "issuelinktype": [
+        {
+          "id": "10011",
+          "name": "Depends",
+          "inwardlinks": {
+            "description": "is depended on by"
+          }
+        },
+        {
+          "id": "10012",
+          "name": "Related",
+          "inwardlinks": {
+            "description": "is related to",
+            "issuelink": {
+              "issuekey": {
+                "id": "1655268",
+                "content": "SERVER-55397"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "attachments": "",
+    "subtasks": "",
+    "customfields": {
+      "customfield": [
+        {
+          "id": "customfield_10050",
+          "key": "com.atlassian.jira.toolkit:comments",
+          "customfieldname": "# Replies",
+          "customfieldvalues": {
+            "customfieldvalue": "3.0"
+          }
+        },
+        {
+          "id": "customfield_18555",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "# of Sprints",
+          "customfieldvalues": {
+            "customfieldvalue": "4.0"
+          }
+        },
+        {
+          "id": "customfield_10011",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Backwards Compatibility",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10038",
+              "content": "Fully Compatible"
+            }
+          }
+        },
+        {
+          "id": "customfield_10055",
+          "key": "com.atlassian.jira.ext.charting:firstresponsedate",
+          "customfieldname": "Date of 1st Reply",
+          "customfieldvalues": {
+            "customfieldvalue": "Fri, 20 Aug 2021 19:19:34 +0000"
+          }
+        },
+        {
+          "id": "customfield_10052",
+          "key": "com.atlassian.jira.toolkit:dayslastcommented",
+          "customfieldname": "Days since reply",
+          "customfieldvalues": "\n                                        4 weeks, 3 days ago\n    \n                        "
+        },
+        {
+          "id": "customfield_18254",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "Dependencies",
+          "customfieldvalues": {
+            "customfieldvalue": ""
+          }
+        },
+        {
+          "id": "customfield_15850",
+          "key": "com.atlassian.jira.plugins.jira-development-integration-plugin:devsummary",
+          "customfieldname": "Development",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_17050",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Downstream Team Attention",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "16941",
+              "content": "Not Needed"
+            }
+          }
+        },
+        {
+          "id": "customfield_10057",
+          "key": "com.atlassian.jira.toolkit:lastusercommented",
+          "customfieldname": "Last comment by Customer",
+          "customfieldvalues": {
+            "customfieldvalue": "true"
+          }
+        },
+        {
+          "id": "customfield_10056",
+          "key": "com.atlassian.jira.toolkit:lastupdaterorcommenter",
+          "customfieldname": "Last commenter",
+          "customfieldvalues": {
+            "customfieldvalue": "gregory.wlodarek"
+          }
+        },
+        {
+          "id": "customfield_11151",
+          "key": "com.atlassian.jira.toolkit:LastCommentDate",
+          "customfieldname": "Last public comment date",
+          "customfieldvalues": "\n                            4 weeks, 3 days ago\n                        "
+        },
+        {
+          "id": "customfield_16465",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "Linked BF Score",
+          "customfieldvalues": {
+            "customfieldvalue": "22.0"
+          }
+        },
+        {
+          "id": "customfield_10032",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+          "customfieldname": "Operating System",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10026",
+              "content": "ALL"
+            }
+          }
+        },
+        {
+          "id": "customfield_10051",
+          "key": "com.atlassian.jira.toolkit:participants",
+          "customfieldname": "Participants",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              "xgen-internal-githook",
+              "gregory.wlodarek"
+            ]
+          }
+        },
+        {
+          "id": "customfield_14254",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Product Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz1ffb:"
+          }
+        },
+        {
+          "id": "customfield_12550",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "0|i006l0:"
+          }
+        },
+        {
+          "id": "customfield_10558",
+          "key": "com.pyxis.greenhopper.jira:gh-global-rank",
+          "customfieldname": "Rank (Obsolete)",
+          "customfieldvalues": {
+            "customfieldvalue": "9223372036854775807"
+          }
+        },
+        {
+          "id": "customfield_10557",
+          "key": "com.pyxis.greenhopper.jira:gh-sprint",
+          "customfieldname": "Sprint",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              {
+                "id": "4653",
+                "content": "Execution Team 2021-04-19"
+              },
+              {
+                "id": "4879",
+                "content": "Execution Team 2021-06-14"
+              },
+              {
+                "id": "5117",
+                "content": "Execution Team 2021-08-23"
+              },
+              {
+                "id": "5118",
+                "content": "Execution Team 2021-09-06"
+              }
+            ]
+          }
+        },
+        {
+          "id": "customfield_10053",
+          "key": "com.atlassian.jira.ext.charting:timeinstatus",
+          "customfieldname": "Time In Status",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_14350",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "serverRank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz11of:"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "[SERVER-55742] Define kmipClientCertificateSelector config on windows/macOS",
+    "link": "https://jira.mongodb.org/browse/SERVER-55742",
+    "project": {
+      "id": "10000",
+      "key": "SERVER",
+      "content": "Core Server"
+    },
+    "environment": "",
+    "key": {
+      "id": "1669692",
+      "content": "SERVER-55742"
+    },
+    "summary": "Define kmipClientCertificateSelector config on windows/macOS",
+    "type": {
+      "id": "1",
+      "iconUrl": "https://jira.mongodb.org/secure/viewavatar?size=xsmall&avatarId=14703&avatarType=issuetype",
+      "content": "Bug"
+    },
+    "priority": {
+      "id": "3",
+      "iconUrl": "https://jira.mongodb.org/images/icons/priorities/major.svg",
+      "content": "Major - P3"
+    },
+    "status": {
+      "id": "6",
+      "iconUrl": "https://jira.mongodb.org/images/icons/statuses/closed.png",
+      "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+      "content": "Closed"
+    },
+    "statusCategory": {
+      "id": "3",
+      "key": "done",
+      "colorName": "green"
+    },
+    "assignee": {
+      "username": "sara.golemon",
+      "content": "Sara Golemon"
+    },
+    "reporter": {
+      "username": "sara.golemon",
+      "content": "Sara Golemon"
+    },
+    "labels": "",
+    "created": "Fri, 2 Apr 2021 14:09:24 +0000",
+    "updated": "Tue, 25 May 2021 22:10:37 +0000",
+    "resolved": "Tue, 13 Apr 2021 23:25:09 +0000",
+    "version": [
+      "4.2.0",
+      "4.4.0"
+    ],
+    "issuelinks": {
+      "issuelinktype": [
+        {
+          "id": "10420",
+          "name": "Backports",
+          "outwardlinks": {
+            "description": "backported by"
+          }
+        },
+        {
+          "id": "10011",
+          "name": "Depends",
+          "inwardlinks": {
+            "description": "is depended on by"
+          }
+        },
+        {
+          "id": "10320",
+          "name": "Documented",
+          "inwardlinks": {
+            "description": "is documented by",
+            "issuelink": {
+              "issuekey": {
+                "id": "1679749",
+                "content": "DOCS-14360"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "attachments": "",
+    "subtasks": "",
+    "customfields": {
+      "customfield": [
+        {
+          "id": "customfield_10050",
+          "key": "com.atlassian.jira.toolkit:comments",
+          "customfieldname": "# Replies",
+          "customfieldvalues": {
+            "customfieldvalue": "3.0"
+          }
+        },
+        {
+          "id": "customfield_18555",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "# of Sprints",
+          "customfieldvalues": {
+            "customfieldvalue": "2.0"
+          }
+        },
+        {
+          "id": "customfield_12450",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes",
+          "customfieldname": "Backport Requested",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              {
+                "key": "21266",
+                "content": "v4.9"
+              },
+              {
+                "key": "18953",
+                "content": "v4.4"
+              },
+              {
+                "key": "16775",
+                "content": "v4.2"
+              }
+            ]
+          }
+        },
+        {
+          "id": "customfield_10011",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Backwards Compatibility",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10011",
+              "content": "Minor Change"
+            }
+          }
+        },
+        {
+          "id": "customfield_13552",
+          "key": "com.go2group.jira.plugin.crm:crm_generic_field",
+          "customfieldname": "Case",
+          "customfieldvalues": {
+            "customfieldvalue": "[5002K00000tRJjjQAG]"
+          }
+        },
+        {
+          "id": "customfield_10055",
+          "key": "com.atlassian.jira.ext.charting:firstresponsedate",
+          "customfieldname": "Date of 1st Reply",
+          "customfieldvalues": {
+            "customfieldvalue": "Tue, 13 Apr 2021 21:24:16 +0000"
+          }
+        },
+        {
+          "id": "customfield_10052",
+          "key": "com.atlassian.jira.toolkit:dayslastcommented",
+          "customfieldname": "Days since reply",
+          "customfieldvalues": "\n                                        19 weeks, 3 days ago\n    \n                        "
+        },
+        {
+          "id": "customfield_18254",
+          "key": "com.onresolve.jira.groovy.groovyrunner:scripted-field",
+          "customfieldname": "Dependencies",
+          "customfieldvalues": {
+            "customfieldvalue": ""
+          }
+        },
+        {
+          "id": "customfield_15850",
+          "key": "com.atlassian.jira.plugins.jira-development-integration-plugin:devsummary",
+          "customfieldname": "Development",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_17052",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:textarea",
+          "customfieldname": "Downstream Changes Summary",
+          "customfieldvalues": {
+            "customfieldvalue": "Due to a bug, current releases of v4.2 and later were missing the kmipClientCertificateSelector setParameter.  This has been remedied on master, and fixes will be backported."
+          }
+        },
+        {
+          "id": "customfield_17050",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons",
+          "customfieldname": "Downstream Team Attention",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "16942",
+              "content": "Needed"
+            }
+          }
+        },
+        {
+          "id": "customfield_10057",
+          "key": "com.atlassian.jira.toolkit:lastusercommented",
+          "customfieldname": "Last comment by Customer",
+          "customfieldvalues": {
+            "customfieldvalue": "true"
+          }
+        },
+        {
+          "id": "customfield_10056",
+          "key": "com.atlassian.jira.toolkit:lastupdaterorcommenter",
+          "customfieldname": "Last commenter",
+          "customfieldvalues": {
+            "customfieldvalue": "vivian.ge"
+          }
+        },
+        {
+          "id": "customfield_11151",
+          "key": "com.atlassian.jira.toolkit:LastCommentDate",
+          "customfieldname": "Last public comment date",
+          "customfieldvalues": "\n                            19 weeks, 3 days ago\n                        "
+        },
+        {
+          "id": "customfield_10032",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:select",
+          "customfieldname": "Operating System",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "10026",
+              "content": "ALL"
+            }
+          }
+        },
+        {
+          "id": "customfield_10051",
+          "key": "com.atlassian.jira.toolkit:participants",
+          "customfieldname": "Participants",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              "xgen-internal-githook",
+              "sara.golemon"
+            ]
+          }
+        },
+        {
+          "id": "customfield_14254",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Product Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz30i7:"
+          }
+        },
+        {
+          "id": "customfield_12550",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "Rank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz4fc7:"
+          }
+        },
+        {
+          "id": "customfield_10558",
+          "key": "com.pyxis.greenhopper.jira:gh-global-rank",
+          "customfieldname": "Rank (Obsolete)",
+          "customfieldvalues": {
+            "customfieldvalue": "9223372036854775807"
+          }
+        },
+        {
+          "id": "customfield_10557",
+          "key": "com.pyxis.greenhopper.jira:gh-sprint",
+          "customfieldname": "Sprint",
+          "customfieldvalues": {
+            "customfieldvalue": [
+              {
+                "id": "4793",
+                "content": "Security 2021-04-05"
+              },
+              {
+                "id": "4794",
+                "content": "Security 2021-04-19"
+              }
+            ]
+          }
+        },
+        {
+          "id": "customfield_17051",
+          "key": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes",
+          "customfieldname": "Teams Impacted",
+          "customfieldvalues": {
+            "customfieldvalue": {
+              "key": "16944",
+              "content": "Docs"
+            }
+          }
+        },
+        {
+          "id": "customfield_10053",
+          "key": "com.atlassian.jira.ext.charting:timeinstatus",
+          "customfieldname": "Time In Status",
+          "customfieldvalues": ""
+        },
+        {
+          "id": "customfield_14350",
+          "key": "com.pyxis.greenhopper.jira:gh-lexo-rank",
+          "customfieldname": "serverRank",
+          "customfieldvalues": {
+            "customfieldvalue": "1|hz2mrb:"
+          }
+        }
+      ]
+    }
+  }
+]

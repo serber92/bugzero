@@ -1,0 +1,5 @@
+Outputs:
+  sendGridApiKeyExport:
+    Value: ${param:SENDGRID_API_KEY}
+    Export:
+      Name: sendGridApiKey

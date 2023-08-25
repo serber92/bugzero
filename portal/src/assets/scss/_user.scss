@@ -1,0 +1,16 @@
+//
+//
+// user.scss
+//
+// Place your own theme CSS or SCSS rules below this line, these rules will override any Bootstrap and theme variables.
+
+@font-face {
+  font-family: 'Geogrotesque';
+  src: local('Geogrotesque'), url(/fonts/Geogrotesque.otf) format('opentype');
+}
+.text-geogrotesque {
+  font-family: 'Geogrotesque', serif;
+}
+.text-red {
+  color: $red;
+}

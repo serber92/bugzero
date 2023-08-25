@@ -1,0 +1,167 @@
+[
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2017-01-03T19:35:03Z",
+    "description": "The reproducer is based on the attachment to\nhttps://sourceware.org/bugzilla/show_bug.cgi?id=2377\n\n  The program runs like this:\n\n1.  A shared object is dlopen'ed.\n2.  A function from the shared oject is run.\n3.  This function creates a thread is created to run a \"service\".\n4.  The shared object is dlclose'd.\n5.  The shared object has a \"fini\" method.\n6.  The \"fini\" method class pthread_join.\n7.  The service receives a C++ exception.\n8.  The service handles the exception and exits.\n\n  The problem is that it blocks at 7.\n  This happens because dlclose runs \"destructors\" with dl_load_lock\nacquired, and the C++ exception calls tls_get_addr_tail() that\ndead locks attempting to acquire dl_load_lock.\n\n  This should be a variant of\nhttps://sourceware.org/git/?p=glibc.git;a=commit;h=e400f3ccd36fe91d432cc7d45b4ccc799dece763\nNow a temporary \"workaround\" could be to \"fix\" it in libstdc++,\nbut the issue would still happen if one has a static tls variable\nthat is first accessed in the \"destructor\", and after dlclose()\nis called, so, a proper correction should be to have a second\nmutex, for the use of tls_get_addr_tail() and others, and then\ndlclose() would also acquire this mutex after run the destructors.",
+    "last_change_time": "2021-09-17T12:06:46Z",
+    "longdescs.count": 10,
+    "op_sys": "Linux",
+    "priority": "medium",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "glibc: [RFE] Deadlock with dlclose call",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2017-02-07T01:31:09Z",
+    "description": "Description of problem:\n\nSome tools run in a 1st party context, they are not part of the application per se but they are linked into the application's address space. There needs to be tool interfaces to the dynamic linker that can be accessed by a tool from inside the process's address space.\n\nThe needs of this 1st party tools interface is roughly parallel to the 3rd party tools interface currently provided by the dynamic linker to debuggers through interfaces like r_debug but because these tools interfaces are dlmopened or inserted into a process's address space they also need access to symbols in other dlmopen'd namespaces.",
+    "id": 1419768,
+    "last_change_time": "2021-09-17T12:06:46Z",
+    "longdescs.count": 9,
+    "op_sys": "Linux",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "glibc: [RFE] [LLNL 7.5 FEAT] Provide 1st party tools interface to process link maps.",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2017-02-07T16:22:26Z",
+    "description": "Description of problem:\nThe DOE has identified that software is the key to unlocking the potential of the next generation of supercomputing systems. To be able to facilitate this new generation of software, tools are needed. As a response LLNL is scaling up its tools team. These new hires and collaborators need better dynamic linker documentation since it is a primary interface for many kinds of tooling.\n\nHere is a proposed patch which adds a chapter to the glibc manual. It has been submitted upstream but it hasn't been applied.",
+    "id": 1420041,
+    "last_change_time": "2021-09-17T12:06:46Z",
+    "longdescs.count": 7,
+    "op_sys": "Unspecified",
+    "priority": "medium",
+    "product": "Red Hat Enterprise Linux 8",
+    "summary": "glibc: [LLNL 7.4 FEAT] Impove the quality of dynamic linker documentation",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2017-02-14T15:48:50Z",
+    "description": "+++ This bug was initially created as a clone of Bug #1422159 +++\n\nPOSIX requires that fork is async-signal-safe.  Our current implementation is not.",
+    "id": "",
+    "last_change_time": "2021-09-17T12:06:46Z",
+    "longdescs.count": 5,
+    "op_sys": "Unspecified",
+    "priority": "medium",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "glibc: fork is not async-signal-safe",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2017-03-06T11:59:02Z",
+    "description": "Description of problem (from upstream):\n\nThe TCP sockets opened by libresolv do not specify timeouts (for connection, sending and receiving).  As a result, connection timeouts take much longer than configured, and applications performing a TCP lookup can hang indefinitely if the TCP connection is severed at the wrong time (without FIN or RST segments being received).\n\nThis affects the NSS functions for the hosts database, too (getaddrinfo etc.).\n\nAt least one commercial DNS fuzzer can send TC=1 replies, but then fail to respond on the TCP port (it accepts the connection, but does not respond).  As a result, this bug can introduce spurious hangs into the fuzzing process, making the interpretation of the results more difficult.",
+    "id": 1429442,
+    "last_change_time": "2021-09-17T12:06:46Z",
+    "longdescs.count": 6,
+    "op_sys": "Unspecified",
+    "priority": "",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "glibc: libresolv does not enforce timeouts on TCP connections",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2017-11-03T10:54:35Z",
+    "description": "Add the ability to specify multiple IP addresses per node for the TCP transport so that multi-homed configurations can use any of a set of IP addresses as a source address and still be recognised by the receiving node. Currently we only support a single source IP address per node when accepting connections.\n\nThis will allow support of a wider variety of network configurations.\n\nThis will likely need some userland changes too, but for the time being I've only opened a kernel bug to track this item. We can clone more bugs later as required, but this is enough to have a placeholder and a location for any discussion.",
+    "id": 1509210,
+    "last_change_time": "2021-10-01T21:50:51Z",
+    "longdescs.count": 25,
+    "op_sys": "Unspecified",
+    "priority": "high",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "",
+    "summary": "dlm: Add ability to recognise multiple source IP addresses per node for the TCP transport",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2018-01-17T21:01:35Z",
+    "description": "Description of problem:\nThe fork() function is incorrectly clearing the set of pending signals for the child process *after* a signal has been sent to the child process; consequently, the signal is never delivered.\n\n\nVersion-Release number of selected component (if applicable):\nglibc 2.17\n\n\nHow reproducible:\nAlways (on my system) if the `usleep(100000)` is commented-out.\n\nSteps to Reproduce:\n1. Build and execute the attached program.\n2. Watch it hang.\n\nActual results:\nThe program hangs due to the following sequence of events:\n    1. The child process is fork()ed;\n    2. The SIGTERM is sent to the child process; and\n    3. The set of pending signals for the child process is cleared\n\nExpected results:\nProgram should immediately exit with status 0.\n\nAdditional info:\nAccording to the POSIX standard at <http://pubs.opengroup.org/onlinepubs/9699919799/>, the following sequence of events should occur:\n    1. The child process is forked();\n    2. The set of pending signals for the child process is cleared; and\n    3. The SIGTERM is sent to the child process.\n\nIn other words, the fork() should be atomic.\n\nMy platform is a 6 processor VMware Workstation 14 Player VM running CentOS 7.4.1708 with gcc 4.8.5 and glibc-2.17-196.el7_4.2.x86_64.",
+    "id": 1535670,
+    "last_change_time": "2021-09-17T12:34:06Z",
+    "longdescs.count": 32,
+    "op_sys": "Unspecified",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "CLOSED",
+    "summary": "Clarify atomicity semantics of sigpause/sigsuspend in glibc.",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2018-04-02T16:29:15Z",
+    "description": "Description of problem:\nIf the TZ environment variable is set to the absolute filepath of the TimeZone, java fall back to setting the timezone in GMT time. \nThis caused incorrect times to be reported in a java/tomcat application. Every time when daylight savings time is active, between March and November in the US.\n\nVersion-Release number of selected component (if applicable):\nRed Hat Enterprise Linux 7.4\njava-1.8.0-openjdk-1.8.0.161-0.b14.el7_4.x86_64\ntzdata-java-2018d-1.el7.noarch\ntzdata-2018d-1.el7.noarch\n\nAlso reproduced on java-1.7.0-openjdk and java-1.6.0-openjdk .\n\nHow reproducible:\nAlways\n\nSteps to Reproduce:\n1. # cat GetDate.java:\nimport java.util.Date;\n\nclass GetDate {\n  /** Print a hello message */\n  public static void main(String[] args) {\n    Date today = new Date();\n    System.out.println(today);\n  }\n}\n\n# javac GetDate.java\n\n2.\n# java GetDate\nWed Mar 21 14:48:35 CDT 2018\n\n3.\n# export TZ=:/etc/localtime\n# java GetDate\nWed Mar 21 13:50:04 GMT-06:00 2018\n\nWith date command, I get the correct time, even with the environment variable\n# date\nWed Mar 21 14:50:06 CDT 2018\n\n# ls -hla /etc/localtime\nlrwxrwxrwx. 1 root root 37 Mar 21 13:28 /etc/localtime -> ../usr/share/zoneinfo/America/Chicago\n\n4.\nIf the TZ environment variable is unset, it provides the correct output.\n$ unset TZ\n$ java GetDate\nWed Mar 21 14:52:38 CDT 2018\n\nActual results:\nWhen TZ is set to absolute path of the TimeZone file, it fails to output the TimeZone but prints the GMT time.\n\nExpected results:\nExpected to return the TimeZone correctly even when TZ environment variable is set.\n\nAdditional info:",
+    "last_change_time": "2021-09-27T14:41:21Z",
+    "longdescs.count": 32,
+    "op_sys": "Linux",
+    "priority": "medium",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "ASSIGNED",
+    "summary": "Setting the TZ environment variable breaks TimeZone in Java",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "gcc-toolset-11-gcc-11.1.1-2.el8",
+    "creation_time": "2018-05-25T13:07:38Z",
+    "description": "Description of problem:\n\nI got these test failures trying to build the stock latest\nRHEL compiler on my Scientific Linux SL 7.5 system - it \nappears to be an 'upstream' (Red Hat) bug - NO non-SL\nRPM binaries were picked up in my $PATH or $LD_LIBRARY_PATH\nduring build with 'rpmbuild -ba SPECS/gcc.spec', where \ngcc.spec comes from SRPM:\n   SRPMS/gcc-4.8.5-28.el7_5.1.src.rpm\n\nAfter build, cd to:\n   BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/gcc/testsuite/g++\n\n  $ grep '^FAIL' g++.log\n\nFAIL: g++.dg/asan/asan_test.C  -O2  AddressSanitizer_SimpleStackTest A[kSize + 31] = 0 execution test\nFAIL: g++.dg/asan/asan_test.C  -O2  AddressSanitizer_SimpleStackTest A[kSize + 31] = 0 execution test\nFAIL: g++.dg/asan/asan_test.C  -O2  AddressSanitizer_SimpleStackTest A[kSize + 31] = 0 execution test\nFAIL: g++.dg/asan/asan_test.C  -O2  AddressSanitizer_SimpleStackTest A[kSize + 31] = 0 execution test\nFAIL: g++.dg/fstack-protector-strong.C -std=gnu++98  scan-assembler-times stack_chk_fail 2\nFAIL: g++.dg/fstack-protector-strong.C -std=gnu++11  scan-assembler-times stack_chk_fail 2\n\n\n(I will raise separate bug about  g++.dg/fstack-protector-strong if not\n already there).\n\nReally, the whole reason I install a RHEL image is so that I have\naccess to a GCC instance where things like asan 'just work' .\n\nI do have gcc 5, 6, 7 and 8 and binutils-2.30\ninstalled under /usr/local/bin, but my $PATH\nfor the build was '/usr/bin' ONLY , \nand /usr/local was not in any environment variable setting.\n\nAll dependencies of GCC RPM are at their latest up-to-date \ndefaults on the target system. So why can't I build the\nsystem compiler without these G++ test suite failures ?\n\nHere is the GCC testsuite summary:\n\n                 === gcc Summary for unix//-fstack-protector ===\n\n# of expected passes            100964\n# of unexpected failures        51\n# of unexpected successes       41\n# of expected failures          332\n# of unsupported tests          1536\n\n                === gcc Summary ===\n\n# of expected passes            151624\n# of unexpected failures        69\n# of unexpected successes       82\n# of expected failures          548\n# of unsupported tests          2103\n\n\nand for G++:\n\n                === g++ Summary for unix//-fstack-protector ===\n\n# of expected passes            45424\n# of unexpected failures        2\n# of expected failures          284\n# of unsupported tests          645\n\n                === g++ Summary ===\n\n# of expected passes            90850\n# of unexpected failures        2\n# of expected failures          568\n# of unsupported tests          1290\n\n\n\n\nResults for GCC 6 (compiled with $PATH starting with /usr/local/bin\nand with /usr/local/lib64 in LD_LIBRARY_PATH) are very slightly \nbetter if workaround for GCC BZ 85924 permitting -static-libasan\nbuilds not to coredump is in place :\n\n                === gcc Summary ===\n\n# of expected passes            123070\n# of unexpected failures        52\n# of unexpected successes       21\n# of expected failures          326\n# of unsupported tests          1773\n\n                === g++ Sumary\n# of unexpected failures        2\n$ grep '^FAIL' g++.log\nFAIL: g++.dg/guality/pr55665.C   -O2  line 23 p == 40\nFAIL: g++.dg/guality/pr55665.C   -O3 -g  line 23 p == 40\n(I raised GCC bug BZ 85887 about this). \n\n\nGCC 7 gets the same G++ test suite failures.\n\nBut I'd have expected the stock RHEL compiler to support -fsanitize=address builds properly.\n\nVersion-Release number of selected component (if applicable):\n\ngcc-4.8.5-28.el7_5.1\n\nHow reproducible:\n\n\nSteps to Reproduce:\n1. Install gcc-4.8.5-28.el7_5.1.srpm & gcc build requires\n2. rpmbuild -ba SPECS/gcc.spec\n3. cd BUILD/gcc-4.8.5-20150702/obj-x86_64-redhat-linux/gcc/testsuite/g++\n4. grep '^FAIL' g++.log\n\nActual results:\n\nTest suite failures.\n\nExpected results:\n\nNo test suite failures.\n\nAdditional info:\n\nI can attach complete 'rpmbuild -ba 2>&1 | tee $LOG_FILE' output if desired.",
+    "id": 1582515,
+    "last_change_time": "2021-09-17T14:35:20Z",
+    "longdescs.count": 25,
+    "op_sys": "Linux",
+    "priority": "",
+    "product": "Red Hat Enterprise Linux 8",
+    "status": "VERIFIED",
+    "summary": "asan test suite fails",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  },
+  {
+    "cf_fixed_in": "",
+    "creation_time": "2018-07-10T01:17:43Z",
+    "description": "Description of problem:\nA RHEL system is joined to a domain using realmd and sssd.  If 'realm permit' is run a line is added to /etc/sssd/sssd.conf file but where this line is added differs.\n\nIf the last line of sssd.conf contains another valid argument then the simple_allow_users entry is simply added to the end of the file.  However if the last line is a comment(#) then the entry is added before the comment.\n\n\nVersion-Release number of selected component (if applicable):\nRed Hat Enterprise Linux 7.5\nrealmd 0.16.1-9\n\nHow reproducible:\nAlways\n\nSteps to Reproduce:\n\n////////////////Example of No comment at end//////////////////\n# cat /etc/sssd/sssd.conf\n[sssd]\n<snip>\n[domain/gsslab.pnq.redhat.com]\n<snip>\naccess_provider = simple\n\n# realm permit 'Domain Users@gsslab.pnq.redhat.com'\n\n# cat /etc/sssd/sssd.conf\n[sssd]\n<snip>\n[domain/gsslab.pnq.redhat.com]\n<snip>\naccess_provider = simple\nsimple_allow_users = domain users\n\n\n////////////Example of with comment at end of sssd.conf//////////////////\n# cat /etc/sssd/sssd.conf\n[sssd]\n<snip>\n[domain/gsslab.pnq.redhat.com]\n<snip>\naccess_provider = simple\n#This is comment\n\n# realm permit 'Domain Users@gsslab.pnq.redhat.com'\n\n# cat /etc/sssd/sssd.conf\n[sssd]\n<snip>\n[domain/gsslab.pnq.redhat.com]\n<snip>\naccess_provider = simple\nsimple_allow_users = domain users <<   Customer wants This to be added at end.\n#This is comment\n\nActual results:\nIf the last line of sssd.conf contains another valid argument then the simple_allow_users entry is simply added to the end of the file.  However if the last line is a comment(#) then the entry is added before the comment.\n\nExpected results:\nThe expected results is for realm to consistently add the \"simple_allow_users\" entry at the end of the line of sssd.conf\n\nAdditional info:\nIssue lies in realmd package.\n\nProblem lies somewhere here:\n        /* A comment? */\n      if (*at == '#' || *at == ';')\n              return COMMENT;\n\n        /* Add this line as the end of the current section */\n      if (type != NONE && type != COMMENT && *current != NULL)\n              (*current)->tail = line;",
+    "id": 1599510,
+    "last_change_time": "2021-09-12T14:48:39Z",
+    "longdescs.count": 14,
+    "op_sys": "Linux",
+    "priority": "unspecified",
+    "product": "Red Hat Enterprise Linux 8",
+    "summary": "\"realm permit\" command illogically adds configuration before last comment in sssd.conf",
+    "version": [
+      "8.2"
+    ],
+    "votes": 0
+  }
+]

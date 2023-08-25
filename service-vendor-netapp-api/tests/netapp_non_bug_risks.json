@@ -1,0 +1,446 @@
+[
+  {
+    "risk":{
+      "riskId":"5294",
+      "severity":"high",
+      "category":"Security",
+      "description":"Service Processor has been determined to have a version or configuration exposed to a Vulnerability. Advisory ID: NTAP-20191031-0005.",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"Firmware Upgrade",
+      "correctiveAction":"<a href=\"https://security.netapp.com/advisory/ntap-20191031-0005\" target=\"_blank\">NTAP-20191031-0005</a><br/>",
+      "impactArea":"Security",
+      "potentialImpact":"See the Security Advisory for overview of this Vulnerability"
+    },
+    "instances":[
+
+    ]
+  },
+  {
+    "risk":{
+      "riskId":"5145",
+      "severity":"high",
+      "category":"Security",
+      "description":"BIOS has been determined to have a version or configuration exposed to a vulnerability.  Advisory ID: NTAP-20180924-0004.",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"OS Upgrade",
+      "correctiveAction":"<a href=\"https://security.netapp.com/advisory/ntap-20180924-0004\" target=\"_blank\">NTAP-20180924-0004</a><br/>",
+      "impactArea":"Security",
+      "potentialImpact":"See Security Advisory for an overview of this Vulnerability. "
+    },
+    "instances":[
+      {
+        "instanceId":"5f3cc164a0f1fc5bb196080f",
+        "status":"active",
+        "serialNumber":"621808000054",
+        "systemId":"0537126047",
+        "hostname":"nsbsancl_02",
+        "details":"BIOS has been determined to have a version or configuration exposed to a vulnerability.  Advisory ID: NTAP-20180924-0004."
+      },
+      {
+        "instanceId":"5f3cbdcba0f1fc5bb184c543",
+        "status":"active",
+        "serialNumber":"621917000511",
+        "systemId":"0538038330",
+        "hostname":"ngcsan-02",
+        "details":"BIOS has been determined to have a version or configuration exposed to a vulnerability.  Advisory ID: NTAP-20180924-0004."
+      },
+      {
+        "instanceId":"5f3cc164a0f1fc5bb196083a",
+        "status":"active",
+        "serialNumber":"621808000053",
+        "systemId":"0537126045",
+        "hostname":"nsbsancl_01",
+        "details":"BIOS has been determined to have a version or configuration exposed to a vulnerability.  Advisory ID: NTAP-20180924-0004."
+      },
+      {
+        "instanceId":"5f3cc164a0f1fc5bb19601e6",
+        "status":"active",
+        "serialNumber":"621917000510",
+        "systemId":"0538038315",
+        "hostname":"ngcsan-01",
+        "details":"BIOS has been determined to have a version or configuration exposed to a vulnerability.  Advisory ID: NTAP-20180924-0004."
+      }
+    ]
+  },
+  {
+    "risk":{
+      "riskId":"4945",
+      "severity":"high",
+      "category":"Security",
+      "description":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002. ",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"OS Upgrade",
+      "correctiveAction":"<a href=\"https://security.netapp.com/advisory/ntap-20200114-0002\" target=\"_blank\">NTAP-20200114-0002</a><br/>",
+      "impactArea":"Security",
+      "potentialImpact":"See the Security Advisory for overview of this Vulnerability."
+    },
+    "instances":[
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18ca056",
+        "status":"active",
+        "serialNumber":"621808000054",
+        "systemId":"0537126047",
+        "hostname":"nsbsancl_02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1922ff9",
+        "status":"active",
+        "serialNumber":"632009000010",
+        "systemId":"0538144086",
+        "hostname":"nkcsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cbccaa0f1fc5bb1800913",
+        "status":"active",
+        "serialNumber":"621940000282",
+        "systemId":"0538120399",
+        "hostname":"nbrsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18c8fc8",
+        "status":"active",
+        "serialNumber":"621917000511",
+        "systemId":"0538038330",
+        "hostname":"ngcsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1922f99",
+        "status":"active",
+        "serialNumber":"622008000079",
+        "systemId":"0538144181",
+        "hostname":"nkesan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1923417",
+        "status":"active",
+        "serialNumber":"622008000075",
+        "systemId":"0538144085",
+        "hostname":"ncosan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cc1dca0f1fc5bb198ab4f",
+        "status":"active",
+        "serialNumber":"621808000053",
+        "systemId":"0537126045",
+        "hostname":"nsbsancl_01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cbccba0f1fc5bb18041b0",
+        "status":"active",
+        "serialNumber":"621940000283",
+        "systemId":"0538120346",
+        "hostname":"nbrsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1923446",
+        "status":"active",
+        "serialNumber":"622008000076",
+        "systemId":"0538144956",
+        "hostname":"ncosan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18c987c",
+        "status":"active",
+        "serialNumber":"621915000203",
+        "systemId":"0538038068",
+        "hostname":"nobsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1922fa4",
+        "status":"active",
+        "serialNumber":"632009000009",
+        "systemId":"0538143413",
+        "hostname":"nkcsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1923256",
+        "status":"active",
+        "serialNumber":"622008000080",
+        "systemId":"0538144957",
+        "hostname":"nkesan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18c9906",
+        "status":"active",
+        "serialNumber":"621915000204",
+        "systemId":"0538038214",
+        "hostname":"nobsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      },
+      {
+        "instanceId":"5f3cbeb8a0f1fc5bb1895556",
+        "status":"active",
+        "serialNumber":"621917000510",
+        "systemId":"0538038315",
+        "hostname":"ngcsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20200114-0002."
+      }
+    ]
+  },
+  {
+    "risk":{
+      "riskId":"4944",
+      "severity":"high",
+      "category":"Security",
+      "description":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004. ",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"OS Upgrade",
+      "correctiveAction":"<a href=\"https://security.netapp.com/advisory/ntap-20191031-0004\" target=\"_blank\">NTAP-20191031-0004</a><br/>",
+      "impactArea":"Security",
+      "potentialImpact":"See the Security Advisory for overview of this Vulnerability."
+    },
+    "instances":[
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1923456",
+        "status":"active",
+        "serialNumber":"622008000076",
+        "systemId":"0538144956",
+        "hostname":"ncosan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18c8fbd",
+        "status":"active",
+        "serialNumber":"621917000511",
+        "systemId":"0538038330",
+        "hostname":"ngcsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18c9884",
+        "status":"active",
+        "serialNumber":"621915000203",
+        "systemId":"0538038068",
+        "hostname":"nobsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cbccba0f1fc5bb18041db",
+        "status":"active",
+        "serialNumber":"621940000283",
+        "systemId":"0538120346",
+        "hostname":"nbrsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb192341f",
+        "status":"active",
+        "serialNumber":"622008000075",
+        "systemId":"0538144085",
+        "hostname":"ncosan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb192326c",
+        "status":"active",
+        "serialNumber":"622008000080",
+        "systemId":"0538144957",
+        "hostname":"nkesan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1922fa8",
+        "status":"active",
+        "serialNumber":"632009000009",
+        "systemId":"0538143413",
+        "hostname":"nkcsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18ca054",
+        "status":"active",
+        "serialNumber":"621808000054",
+        "systemId":"0537126047",
+        "hostname":"nsbsancl_02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cbf75a0f1fc5bb18c9905",
+        "status":"active",
+        "serialNumber":"621915000204",
+        "systemId":"0538038214",
+        "hostname":"nobsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1922f9d",
+        "status":"active",
+        "serialNumber":"622008000079",
+        "systemId":"0538144181",
+        "hostname":"nkesan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cbeb8a0f1fc5bb189554a",
+        "status":"active",
+        "serialNumber":"621917000510",
+        "systemId":"0538038315",
+        "hostname":"ngcsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cc05aa0f1fc5bb1922ff0",
+        "status":"active",
+        "serialNumber":"632009000010",
+        "systemId":"0538144086",
+        "hostname":"nkcsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cbccaa0f1fc5bb1800936",
+        "status":"active",
+        "serialNumber":"621940000282",
+        "systemId":"0538120399",
+        "hostname":"nbrsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      },
+      {
+        "instanceId":"5f3cc1dca0f1fc5bb198ab30",
+        "status":"active",
+        "serialNumber":"621808000053",
+        "systemId":"0537126045",
+        "hostname":"nsbsancl_01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20191031-0004."
+      }
+    ]
+  },
+  {
+    "risk":{
+      "riskId":"4942",
+      "severity":"high",
+      "category":"Security",
+      "description":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002. ",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"OS Upgrade",
+      "correctiveAction":"<a href=\"https://security.netapp.com/advisory/ntap-20190910-0002\" target=\"_blank\">NTAP-20190910-0002</a><br/>",
+      "impactArea":"Security",
+      "potentialImpact":"See the Security Advisory for overview of this Vulnerability."
+    },
+    "instances":[
+      {
+        "instanceId":"5f3cc0aaa0f1fc5bb1944e42",
+        "status":"active",
+        "serialNumber":"622008000075",
+        "systemId":"0538144085",
+        "hostname":"ncosan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdfda0f1fc5bb185b456",
+        "status":"active",
+        "serialNumber":"632009000009",
+        "systemId":"0538143413",
+        "hostname":"nkcsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf9a0f1fc5bb185abab",
+        "status":"active",
+        "serialNumber":"622008000076",
+        "systemId":"0538144956",
+        "hostname":"ncosan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cc368a0f1fc5bb19ff48a",
+        "status":"active",
+        "serialNumber":"621917000511",
+        "systemId":"0538038330",
+        "hostname":"ngcsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf9a0f1fc5bb185ada3",
+        "status":"active",
+        "serialNumber":"632009000010",
+        "systemId":"0538144086",
+        "hostname":"nkcsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf8a0f1fc5bb1856954",
+        "status":"active",
+        "serialNumber":"621915000204",
+        "systemId":"0538038214",
+        "hostname":"nobsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdfda0f1fc5bb185b530",
+        "status":"active",
+        "serialNumber":"621915000203",
+        "systemId":"0538038068",
+        "hostname":"nobsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf9a0f1fc5bb18591a0",
+        "status":"active",
+        "serialNumber":"621940000282",
+        "systemId":"0538120399",
+        "hostname":"nbrsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf8a0f1fc5bb1858c43",
+        "status":"active",
+        "serialNumber":"621940000283",
+        "systemId":"0538120346",
+        "hostname":"nbrsan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf8a0f1fc5bb1855a11",
+        "status":"active",
+        "serialNumber":"622008000079",
+        "systemId":"0538144181",
+        "hostname":"nkesan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf9a0f1fc5bb185ad06",
+        "status":"active",
+        "serialNumber":"621917000510",
+        "systemId":"0538038315",
+        "hostname":"ngcsan-01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cc368a0f1fc5bb19febed",
+        "status":"active",
+        "serialNumber":"622008000080",
+        "systemId":"0538144957",
+        "hostname":"nkesan-02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cbdf9a0f1fc5bb185a4e1",
+        "status":"active",
+        "serialNumber":"621808000053",
+        "systemId":"0537126045",
+        "hostname":"nsbsancl_01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      },
+      {
+        "instanceId":"5f3cc368a0f1fc5bb19fedb0",
+        "status":"active",
+        "serialNumber":"621808000054",
+        "systemId":"0537126047",
+        "hostname":"nsbsancl_02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID: NTAP-20190910-0002."
+      }
+    ]
+  }
+]

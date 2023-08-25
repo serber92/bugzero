@@ -1,0 +1,113 @@
+[
+  {
+    "risk":{
+      "riskId":"4937",
+      "severity":"high",
+      "category":"ONTAP",
+      "description":"If a LIF's home-port is on a IFGRP/VLAN and it has no configured or available failover targets on another node then its home-port might automatically be moved from the configured IFGRP/vlan to a physical port during a reboot.",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"OS Upgrade",
+      "correctiveAction":"<a href=\"https://mysupport.netapp.com/site/bugs-online/product/ONTAP/BURT/1215654\" target=\"_blank\">Bug ID: 1215654</a><br/>",
+      "impactArea":"Availability",
+      "potentialImpact":"LIF connectivity issues and data accessibility loss after a reboot."
+    },
+    "instances":[
+      {
+        "instanceId":"5f3cbaa1a0f1fc5bb17628d4",
+        "status":"active",
+        "serialNumber":"621915000204",
+        "systemId":"0538038214",
+        "hostname":"nobsan-02",
+        "details":"System is running ONTAP 9.5P3 and is vulnerable to bug 1215654, LIF inter_lif_1 has no configured failover targets on another node."
+      },
+      {
+        "instanceId":"5f3cba9ca0f1fc5bb1760ae9",
+        "status":"active",
+        "serialNumber":"621917000511",
+        "systemId":"0538038330",
+        "hostname":"ngcsan-02",
+        "details":"System is running ONTAP 9.5P3 and is vulnerable to bug 1215654, LIF inter_lif_1 has no configured failover targets on another node."
+      },
+      {
+        "instanceId":"5f3cbaa1a0f1fc5bb1762af4",
+        "status":"active",
+        "serialNumber":"621915000203",
+        "systemId":"0538038068",
+        "hostname":"nobsan-01",
+        "details":"System is running ONTAP 9.5P3 and is vulnerable to bug 1215654, LIF inter_lif_0 has no configured failover targets on another node."
+      },
+      {
+        "instanceId":"5f3cbaa1a0f1fc5bb1762b6a",
+        "status":"active",
+        "serialNumber":"621917000510",
+        "systemId":"0538038315",
+        "hostname":"ngcsan-01",
+        "details":"System is running ONTAP 9.5P3 and is vulnerable to bug 1215654, LIF inter_lif_0 has no configured failover targets on another node."
+      }
+    ]
+  },
+  {
+    "risk":{
+      "riskId":"4781",
+      "severity":"high",
+      "category":"Security",
+      "description":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID:NTAP-20180423-0003.",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"OS Upgrade",
+      "correctiveAction":"<a href=\"https://security.netapp.com/advisory/ntap-20180423-0003/\" target=\"_blank\">NTAP-20180423-0003</a><br/>",
+      "impactArea":"Security",
+      "potentialImpact":"See the Security Advisory for an overview of this vulnerability."
+    },
+    "instances":[
+      {
+        "instanceId":"5f3cbb8fa0f1fc5bb17acb1e",
+        "status":"active",
+        "serialNumber":"621808000054",
+        "systemId":"0537126047",
+        "hostname":"nsbsancl_02",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID:NTAP-20180423-0003."
+      },
+      {
+        "instanceId":"5f3cbb8fa0f1fc5bb17ad58a",
+        "status":"active",
+        "serialNumber":"621808000053",
+        "systemId":"0537126045",
+        "hostname":"nsbsancl_01",
+        "details":"Clustered Data ONTAP has been determined to have a version or configuration exposed to a vulnerability. Advisory ID:NTAP-20180423-0003."
+      }
+    ]
+  },
+  {
+    "risk":{
+      "riskId":"4410",
+      "severity":"high",
+      "category":"ONTAP",
+      "description":"Upgrades might fail due to an expired certificate.",
+      "mitigationCategory":"Potentially Non-disruptive",
+      "mitigationAction":"OS Upgrade",
+      "correctiveAction":"<a href=\"https://mysupport.netapp.com/site/bugs-online/product/ONTAP/BURT/1250500\" target=\"_blank\">Bug ID: 1250500</a><br/>",
+      "impactArea":"Availability",
+      "potentialImpact":"Upgrade process might get stuck in progress and upgrade might not complete."
+    },
+    "instances":[
+      {
+        "instanceId":"5f3cab6da0f1fc5bb1205898",
+        "status":"active",
+        "serialNumber":"701438000007",
+        "systemId":"0536906207",
+        "hostname":"nchsancl-01",
+        "acknowledgedDate":"2020-07-14T17:02:13.768+00:00",
+        "details":"Upgrades to a new major version from 9.1 or earlier will fail due to bug 1250500. Upgrade to 9.3P14, 9.4P8, 9.5P6, 9.6(GA) or higher to avoid."
+      },
+      {
+        "instanceId":"5f3caacca0f1fc5bb11ccbf5",
+        "status":"active",
+        "serialNumber":"791435000007",
+        "systemId":"0536908992",
+        "hostname":"nchsancl-02",
+        "acknowledgedDate":"2020-07-14T17:02:13.768+00:00",
+        "details":"Upgrades to a new major version from 9.1 or earlier will fail due to bug 1250500. Upgrade to 9.3P14, 9.4P8, 9.5P6, 9.6(GA) or higher to avoid."
+      }
+    ]
+  }
+]

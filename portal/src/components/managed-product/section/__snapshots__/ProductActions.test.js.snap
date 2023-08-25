@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should test ProductActions component 1`] = `
+<Fragment>
+  <Row
+    className="flex-between-center"
+    style={
+      Object {
+        "marginTop": "40px",
+      }
+    }
+    tag="div"
+    widths={
+      Array [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl",
+      ]
+    }
+  >
+    <Col
+      tag="div"
+      widths={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl",
+        ]
+      }
+      xs="4"
+    >
+      <FormGroup
+        tag="div"
+      >
+        <Button
+          block={true}
+          color="falcon-danger"
+          onClick={[Function]}
+          tag="button"
+        >
+          Cancel
+        </Button>
+      </FormGroup>
+    </Col>
+    <Col
+      tag="div"
+      widths={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl",
+        ]
+      }
+      xs="4"
+    >
+      <FormGroup
+        tag="div"
+      />
+    </Col>
+    <Col
+      tag="div"
+      widths={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl",
+        ]
+      }
+      xs="4"
+    >
+      <FormGroup
+        tag="div"
+      >
+        <LoaderButton
+          block={true}
+          color="falcon-primary"
+          isLoading={false}
+          name="save-and-add"
+          onClick={[Function]}
+        >
+          Save
+        </LoaderButton>
+      </FormGroup>
+    </Col>
+  </Row>
+</Fragment>
+`;

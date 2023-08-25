@@ -1,0 +1,23 @@
+Resources:
+  SNSEventMgmtTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: SNS Event Management Topic
+      TopicName: SNSEventMgmtTopic
+  SNSServiceTriggerTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: SNS Service Trigger Topic
+      TopicName: SNSServiceTriggerTopic
+Outputs:
+  # Export ARN's for other services
+  SNSEventMgmtTopicExport:
+    Value:
+      Ref: SNSEventMgmtTopic
+    Export:
+      Name: SNSEventMgmtTopic
+  SNSServiceTriggerTopicExport:
+    Value:
+      Ref: SNSServiceTriggerTopic
+    Export:
+      Name: SNSServiceTriggerTopic

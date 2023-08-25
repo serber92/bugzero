@@ -1,0 +1,42 @@
+{
+  "name": "bugzero-http-api",
+  "version": "1.0.0",
+  "description": "BugZero HTTP API (AWS + Serveless)",
+  "main": "profile.js",
+  "scripts": {
+    "test": "cd services/bugzero-rest-api/ && npm run test",
+    "lint": "./node_modules/.bin/eslint services",
+    "migrate": "./node_modules/.bin/sequelize db:migrate --config db/config.js --migrations-path db/migrations"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FindBugZero/bugzero-http-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FindBugZero/bugzero-http-api/issues"
+  },
+  "homepage": "https://github.com/FindBugZero/bugzero-http-api#readme",
+  "dependencies": {
+    "amazon-cognito-identity-js": "^4.3.2",
+    "aws-sdk": "^2.697.0",
+    "axios": "^0.19.2",
+    "dotenv": "^10.0.0",
+    "glob": "^7.1.7",
+    "http-status": "^1.4.2",
+    "mysql2": "^2.2.5",
+    "node-fetch": "^2.6.0",
+    "sequelize": "^6.6.2",
+    "serverless-plugin-scripts": "^1.0.2",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.3.1",
+    "husky": "^4.3.0",
+    "sequelize-cli": "^6.2.0"
+  },
+  "husky": {
+    "hooks": {}
+  }
+}

@@ -1,0 +1,219 @@
+Resources:
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CrossAccountRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - arn:aws:iam::700273140451:root
+            Action:
+              - sts:AssumeRole
+          - Action: ["sts:AssumeRole"]
+            Effect: Allow
+            Principal:
+              Service: [codebuild.amazonaws.com]
+
+      Path: /
+      Policies:
+        - PolicyName: CrossAccountPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - codecommit:BatchGetRepositories
+                  - codecommit:Get*
+                  - codecommit:GitPull
+                  - codecommit:List*
+                  - codecommit:CancelUploadArchive
+                  - codecommit:UploadArchive
+                  - s3:*
+                Resource: "*"
+              - Sid: CloudWatchLogsPolicy
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+              - Sid: CodeBuildAllow
+                Effect: Allow
+                Action: codebuild:*
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - kms:DescribeKey
+                  - kms:GenerateDataKey*
+                  - kms:Encrypt
+                  - kms:ReEncrypt*
+                  - kms:Decrypt
+                Resource:
+                  - arn:aws:kms:us-east-1:700273140451:key/69ebf643-6d74-4e55-8ae2-be9049da6196
+              - Effect: Allow
+                Action:
+                  - s3:GetObject*
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                  - codecommit:ListBranches
+                  - codecommit:ListRepositories
+                Resource:
+                  - arn:aws:s3:::codepipeline-us-east-1-706272841601/*
+              - Effect: Allow
+                Action:
+                  - s3:Get*
+                Resource:
+                  - arn:aws:s3:::codepipeline-us-east-1-706272841601/*
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource:
+                  - arn:aws:s3:::codepipeline-us-east-1-706272841601
+              - Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeDhcpOptions
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeSecurityGroups
+                  - ec2:DescribeVpcs
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - ec2:CreateNetworkInterfacePermission
+                Resource: "*"
+          # Roles:
+          #   - !Ref CodeBuildRole
+  CodeBuild:
+    Type: "AWS::CodeBuild::Project"
+    Properties:
+      Name: !Sub ${AWS::StackName}-CodeBuild
+      EncryptionKey: arn:aws:kms:us-east-1:700273140451:alias/aws/s3
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt VPCSecurityGroup.GroupId
+        Subnets:
+          - !Ref PrivateSubnet1
+          - !Ref PrivateSubnet2
+        VpcId: !Ref Vpc
+      Artifacts:
+        # The downloaded source code for the build will come from CodePipeline
+        Type: CODEPIPELINE
+        Name: MyProject
+      Environment:
+        # Linux container with node installed
+        ComputeType: BUILD_GENERAL1_SMALL
+        Type: LINUX_CONTAINER
+        Image: "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
+        EnvironmentVariables:
+          - Name: DATABASE_USER
+            Type: PLAINTEXT
+            Value: ${param:DB_USER}
+          - Name: DATABASE_PASSWORD
+            Type: PLAINTEXT
+            Value: ${param:DB_PASS}
+          - Name: DATABASE_HOST
+            Type: PLAINTEXT
+            Value: !GetAtt Database.Endpoint.Address
+          - Name: DATABASE_DB
+            Type: PLAINTEXT
+            Value: ${self:custom.dbName}
+          - Name: DATABASE_PORT
+            Type: PLAINTEXT
+            Value: "3306"
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.2
+          phases:
+            pre_build:
+              commands:
+                - ls
+                - yum -y update
+                - yum search mysql
+                - yum -y install mysql
+                - mysql --version
+                - cd service-common && npm install --ignore-scripts
+            build:
+              commands:
+                - npx sequelize-cli db:migrate --config db/config.js --migrations-path db/migrations
+          artifacts:
+            files:
+              - "**/*"
+            discard-paths: no
+  CodeBuildQASeed:
+    Type: "AWS::CodeBuild::Project"
+    Properties:
+      Name: !Sub ${AWS::StackName}-CodeBuildQASeed
+      EncryptionKey: arn:aws:kms:us-east-1:700273140451:alias/aws/s3
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt VPCSecurityGroup.GroupId
+        Subnets:
+          - !Ref PrivateSubnet1
+          - !Ref PrivateSubnet2
+        VpcId: !Ref Vpc
+      Artifacts:
+        # The downloaded source code for the build will come from CodePipeline
+        Type: CODEPIPELINE
+        Name: MyProject
+      Environment:
+        # Linux container with node installed
+        ComputeType: BUILD_GENERAL1_SMALL
+        Type: LINUX_CONTAINER
+        Image: "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
+        EnvironmentVariables:
+          - Name: DATABASE_USER
+            Type: PLAINTEXT
+            Value: ${param:DB_USER}
+          - Name: DATABASE_PASSWORD
+            Type: PLAINTEXT
+            Value: ${param:DB_PASS}
+          - Name: DATABASE_HOST
+            Type: PLAINTEXT
+            Value: !GetAtt Database.Endpoint.Address
+          - Name: DATABASE_DB
+            Type: PLAINTEXT
+            Value: ${self:custom.dbName}
+          - Name: DATABASE_PORT
+            Type: PLAINTEXT
+            Value: "3306"
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.2
+          phases:
+            pre_build:
+              commands:
+                - ls
+                - yum -y update
+                - yum search mysql
+                - yum -y install mysql
+                - mysql --version
+                - cd service-common && npm install --ignore-scripts
+            build:
+              commands:
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS bugs"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS managedProducts"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS managedProductVersions"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS msftBugs"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS SequelizeMeta"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS serviceExecutions"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS services"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS settings"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS vendorProductFamilies"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS vendorProducts"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS vendorProductVersions"
+                - mysql -h${Database.Endpoint.Address} ${self:custom.dbName} -u${param:DB_USER} -p${param:DB_PASS} -e "SET FOREIGN_KEY_CHECKS = 0;DROP TABLE IF EXISTS vendors;SET FOREIGN_KEY_CHECKS = 1;"
+                - npx sequelize-cli db:migrate --config db/config.js --migrations-path db/migrations
+                - npx sequelize-cli db:seed --seed qa-bootstrap.js --config db/config.js --seeders-path db/seeds
+          artifacts:
+            files:
+              - "**/*"
+            discard-paths: no

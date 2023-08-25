@@ -1,0 +1,48 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+        exclude: ".json$"
+  - repo: local
+    hooks:
+      - id: pylint
+        exclude: external_dependencies.py # mock dependencies that don't need to be linted
+        name: pylint
+        entry: venv/bin/pylint
+        language: system
+        types: [python]
+        args:
+          - --max-line-length=120
+          - -d duplicate-code
+          - --disable=logging-fstring-interpolation
+          - --disable=W1202 # disable logging-format-interpolation exception
+          - --disable=C0103 # disable one letter arguments error exception
+          - --disable=I1101 # disable failure on inspecting C extensions external to the standard library
+          - --disable=W1309 # disable f-string-without-interpolation
+          - --disable=R0902 # disable too-many-instance-attributes
+          - --disable=R0912 # disable too-many-branches ( if, try, while - loops are branches ) exception
+          - --disable=R0913 # disable too-many-arguments function arguments exception
+          - --disable=R0914 # disable too-many-locals function exception
+          - --disable=R1728 # disable consider-using-generator exception
+          - --disable=R0123 # disable literal-comparison ( necessary for sqlalchemy )
+          - --disable=R0915 # disable too-many-statements
+          - --disable=R0901 # disable too many ancestors
+          - --disable=W0614 # disable unused-wildcard-import - used for testing by pytest
+          - --disable=C0415 # disable import-outside-toplevel - used for testing by pytest
+          - --disable=E0211 # disable no-method-argument - used for testing by pytest
+          - --disable=R0903 # disable too-few-public-methods - used for testing by pytest
+          - --disable=C0302 # disable too-many-lines - temporary
+          - --disable=W0703 # disable broad-except - so unplanned exception could be sent to SN eventManagement
+          - --disable=W0238 # disable unused-private-member - Unused private member for aws HealthClient.__client`
+#       - id: pytest
+#         name: pytest
+#         entry: venv/bin/pytest --cov-fail-under=80 --cov-config=.coveragerc
+#         language: script
+#         pass_filenames: false
+#         always_run: true
+
+default_language_version:
+  python: python3.7

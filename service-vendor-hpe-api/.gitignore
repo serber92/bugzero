@@ -1,0 +1,12 @@
+.serverless/
+node_modules/
+.DS_Store
+report/
+package-lock.json
+.coverage
+.idea/
+__pycache__/
+bugzero.sql
+htmlcov/
+tests/__pycache__/
+venv/
